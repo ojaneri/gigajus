@@ -1,0 +1,15 @@
+# Ignore uploads directory
+uploads/
+
+# Ignore logs
+*.log
+
+# Ignore configuration files with sensitive information
+config.ini
+gdrive.credentials
+
+# Ignore vendor directory
+vendor/
+
+# Ignore debug files
+debug
