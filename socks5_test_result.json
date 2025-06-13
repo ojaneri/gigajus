@@ -1,0 +1,75 @@
+*   Trying 200.234.178.126:59101...
+* TCP_NODELAY set
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* SOCKS5 communication to comunicaapi.pje.jus.br:443
+* SOCKS5 connect to IPv4 3.171.139.97:443 (locally resolved)
+* SOCKS5 request granted.
+* Connected to 200.234.178.126 (200.234.178.126) port 59101 (#0)
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* successfully set certificate verify locations:
+*   CAfile: /etc/ssl/certs/ca-certificates.crt
+  CApath: /usr/local/openssl/certs
+} [5 bytes data]
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+} [512 bytes data]
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* TLSv1.3 (IN), TLS handshake, Server hello (2):
+{ [122 bytes data]
+* TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+{ [19 bytes data]
+* TLSv1.3 (IN), TLS handshake, Certificate (11):
+{ [2783 bytes data]
+* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+{ [264 bytes data]
+* TLSv1.3 (IN), TLS handshake, Finished (20):
+{ [36 bytes data]
+* TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+} [1 bytes data]
+* TLSv1.3 (OUT), TLS handshake, Finished (20):
+} [36 bytes data]
+* SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256
+* ALPN, server accepted to use h2
+* Server certificate:
+*  subject: CN=pje.jus.br
+*  start date: Mar 20 15:08:35 2025 GMT
+*  expire date: Jun 18 15:08:34 2025 GMT
+*  subjectAltName: host "comunicaapi.pje.jus.br" matched cert's "*.pje.jus.br"
+*  issuer: C=US; O=Let's Encrypt; CN=R11
+*  SSL certificate verify ok.
+* Using HTTP2, server supports multi-use
+* Connection state changed (HTTP/2 confirmed)
+* Copying HTTP/2 data in stream buffer to connection buffer after upgrade: len=0
+} [5 bytes data]
+* Using Stream ID: 1 (easy handle 0x561e9303fb60)
+} [5 bytes data]
+> GET /api/v1/comunicacao?dataDisponibilizacaoInicio=2025-05-09&dataDisponibilizacaoFim=2025-05-16&pagina=1&tamanhoPagina=10&meio=D HTTP/2
+> Host: comunicaapi.pje.jus.br
+> user-agent: curl/7.68.0
+> accept: application/json
+> 
+{ [5 bytes data]
+* TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+{ [157 bytes data]
+* Connection state changed (MAX_CONCURRENT_STREAMS == 128)!
+} [5 bytes data]
+  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:02 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:03 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:04 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:05 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:06 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:07 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:08 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:09 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:10 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:11 --:--:--     0  0     0    0     0    0     0      0      0 --:--:--  0:00:12 --:--:--     0< HTTP/2 500 
+< content-type: application/json
+< date: Fri, 16 May 2025 13:38:44 GMT
+< access-control-allow-origin: *
+< access-control-allow-credentials: true
+< cache-control: no-cache, private
+< x-ratelimit-limit: 20
+< x-ratelimit-remaining: 20
+< strict-transport-security: max-age=31536000; includeSubDomains
+< x-cache: Error from cloudfront
+< via: 1.1 ded721d3aeecfb4f35d39da9e2d34066.cloudfront.net (CloudFront)
+< x-amz-cf-pop: JFK52-P8
+< x-amz-cf-id: 57N8JRxTGq7Le5ocP3Y8NSWZaLazlxoWh1T2i05hGa2eA2eAKu1mCg==
+< 
+{ [33 bytes data]
+100    33    0    33    0     0      2      0 --:--:--  0:00:12 --:--:--     7
+* Connection #0 to host 200.234.178.126 left intact
+{
+    "message": "Server Error"
+}

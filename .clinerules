@@ -1,0 +1,334 @@
+---
+versão: 1.3.0
+data: 2025-04-28
+autor: Osvaldo Janeri Filho <osvaldo@janeri.com.br>
+changelog: veja seção "12. Histórico de Alterações" ao final
+---
+
+# Sumário
+
+1. [Check de Integridade](#check-de-integridade)  
+2. [1. Modo Debug](#1-modo-debug)  
+3. [2. Logs e Permissões](#2-logs-e-permissões)  
+4. [3. Interface de Debug](#3-interface-de-debug)  
+5. [4. Deploy e Controle de Mudanças](#4-deploy-e-controle-de-mudanças)  
+6. [5. Boas Práticas de Código](#5-boas-práticas-de-código)  
+7. [6. Qualidade de Código e Automação](#6-qualidade-de-código-e-automação)  
+8. [7. Segurança](#7-segurança)  
+9. [8. Estilos e Scripts](#8-estilos-e-scripts)  
+10. [9. Documentação Interna e Padrões](#9-documentação-interna-e-padrões)  
+11. [10. Arquitetura e Banco de Dados](#10-arquitetura-e-banco-de-dados)  
+12. [11. Exemplos de Uso de Scripts](#11-exemplos-de-uso-de-scripts)  
+13. [12. Histórico de Alterações](#12-histórico-de-alterações)  
+14. [13. Referências](#13-referências)  
+15. [14. Testes Automatizados](#14-testes-automatizados)  
+16. [15. Regras Específicas do Projeto](#15-regras-específicas-do-projeto)  
+17. [16. Configurações do Cline](#16-configurações-do-cline)  
+18. [17. Estrutura do Memory Bank](#17-estrutura-do-memory-bank)  
+19. [18. Práticas de Documentação](#18-práticas-de-documentação)  
+20. [19. Regras de Segurança Adicionais](#19-regras-de-segurança-adicionais)  
+21. [20. Considerações Finais](#20-considerações-finais)  
+
+---
+
+## Check de Integridade
+
+- ✅ Verificar existência dos arquivos **core** no `memory-bank/`:  
+  - `projectbrief.md`, `productContext.md`, `systemPatterns.md`, `techContext.md`,  
+    `activeContext.md`, `progress.md`, `bugs.md`, `functions.md`
+- ✅ Executar **MarkdownLint** para validar sintaxe em todos os `.md`.
+- ⚠️ Se algum arquivo estiver faltando ou houver erro de sintaxe, interrompa e liste o problema.
+- O arquivo `functions.md` deve conter as funções do sistema, sua sintaxe e os arquivos nos quais se encontram.
+
+---
+
+## 1. Modo Debug
+
+1. **Ativação automática**  
+   - Presença de `./debug` ativa **modo debug** (logs nível DEBUG, extra-verbosos).
+   - Logs são salvos em `gigajus.log` e `api.log`.
+2. **Modo normal**  
+   - Ausência de `./debug` utiliza logs nos níveis INFO e WARNING.
+   - Função `logMessage()` em `config.php` gerencia os logs.
+
+---
+
+## 2. Logs e Permissões
+
+- **Arquivos de log**:  
+  - `gigajus.log`: Log principal do sistema
+  - `api.log`: Log de comunicação com APIs externas
+- **Permissões**: `chown -R www-data:www-data logs/`  
+  - Criar diretórios/arquivos faltantes com `mkdir -p` e `touch`, preservando permissões.
+- **Monitoramento**: `tail -f gigajus.log` para acompanhamento em tempo real.
+
+---
+
+## 3. Interface de Debug
+
+- **Painel de debug flutuante**  
+  - Visível apenas para administradores.
+  - Implementado em `notifications.php` e outras páginas críticas.
+- **Informações exibidas**:
+  - URL da API construída
+  - Parâmetros utilizados
+  - Últimas entradas do log
+  - Links para testes com parâmetros específicos
+
+---
+
+## 4. Deploy e Controle de Mudanças
+
+1. **Planejamento prévio**  
+   - Liste em passo a passo numerado:
+     1. Descrição da mudança
+     2. Arquivos afetados
+     3. Dependências
+     4. Testes necessários
+2. **Versionamento**  
+   - Commits atômicos; cada commit corresponde a um único passo.
+3. **Alterações de Banco**
+   - Criar arquivos SQL separados para cada alteração (ex: `add_teor_column.sql`)
+   - Implementar scripts PHP correspondentes (ex: `add_teor_column.php`)
+
+---
+
+## 5. Boas Práticas de Código
+
+- **Modularização**  
+  - Separar funcionalidades em arquivos específicos
+  - Helpers em `includes/notifications_helper.php`
+- **Nomenclatura**  
+  - `snake_case` para funções e variáveis
+  - Prefixos claros: `get_`, `add_`, `update_`, `delete_`
+- **Tratamento de erros**  
+  - Usar `try/catch` para operações críticas
+  - Registrar erros com `logMessage()`
+- **Configurações**
+  - Centralizar em `config.php`
+  - Separar credenciais sensíveis
+
+---
+
+## 6. Qualidade de Código e Automação
+
+- **Verificações**  
+  - Validar existência de colunas antes de usar: `SHOW COLUMNS FROM table LIKE 'column'`
+  - Implementar verificações de integridade em scripts de alteração
+- **Testes**  
+  - Arquivos de teste com prefixo `test_` (ex: `test_api_curl.php`)
+- **Automação**
+  - Script de sincronização com Google Drive: `sync_gdrive.sh` (a cada 30 minutos)
+
+---
+
+## 7. Segurança
+
+- **Banco de Dados**  
+  - Usar _prepared statements_ em todas as queries
+  - Exemplo: `$stmt = $conn->prepare("SELECT * FROM clientes WHERE id_cliente = ?");`
+- **Validação de Input**  
+  - Sanitizar com `htmlspecialchars()` na saída
+  - Validar tipos com `is_numeric()`, `filter_var()`, etc.
+- **Autenticação**
+  - Sistema de tokens para usuários: `create_user_tokens_table.php`
+  - Verificação de sessão em todas as páginas restritas
+
+---
+
+## 8. Estilos e Scripts
+
+- **CSS**  
+  - Arquivos em `assets/css/`:
+    - `unified.css`: Estilos globais
+    - `dashboard.css`: Estilos do painel
+    - `style.css`: Estilos específicos
+- **JavaScript**  
+  - Arquivos em `assets/js/`:
+    - `common.js`: Funções comuns
+    - `dashboard.js`: Funcionalidades do painel
+    - `script.js`: Scripts específicos
+
+---
+
+## 9. Documentação Interna e Padrões
+
+- **Cabeçalho de Arquivo**
+  ```php
+  /**
+   * nome-do-arquivo.php
+   * Descrição breve do propósito do arquivo.
+   * Autor: Nome <email>
+   * Data: AAAA-MM-DD
+   */
+  ```
+
+- **Comentários de Função**
+  ```php
+  /**
+   * Descrição da função
+   * @param tipo $nome Descrição do parâmetro
+   * @return tipo Descrição do retorno
+   */
+  function nome_funcao($parametro) {
+      // Implementação
+  }
+  ```
+
+---
+
+## 10. Arquitetura e Banco de Dados
+
+- **Estrutura de Tabelas**
+  - Documentada em `create_tables.sql`
+  - Alterações incrementais em arquivos separados:
+    - `add_teor_column.sql`
+    - `add_processed_columns.sql`
+    - `create_user_tokens_table.sql`
+
+- **Relacionamentos**
+  - Clientes -> Processos -> Atendimentos
+  - Usuários -> Empresas -> Advogados
+  - Notificações -> Processos
+
+---
+
+## 11. Exemplos de Uso de Scripts
+
+- **Comunicação com API**
+  ```php
+  // Exemplo de uso do comunicaapi.py
+  $command = "python3 comunicaapi.py --tribunal TJCE --data_inicio 2025-04-01 --data_fim 2025-04-28";
+  exec($command, $output, $return_var);
+  ```
+
+- **Processamento de Notificações**
+  ```php
+  // Marcar notificação como processada
+  $stmt = $conn->prepare("UPDATE notifications SET processada = 1 WHERE id = ?");
+  $stmt->bind_param("i", $notification_id);
+  $stmt->execute();
+  ```
+
+---
+
+## 12. Histórico de Alterações
+
+- **v1.3.0 (2025-04-28)**
+  - Adicionadas seções sobre estrutura de diretórios
+  - Incluídos padrões de design e estilo
+  - Documentados padrões de cores e ícones
+
+- **v1.2.0 (2025-03-15)**
+  - Adicionadas regras para alterações de banco de dados
+  - Incluídas diretrizes para testes
+
+- **v1.1.0 (2025-02-01)**
+  - Versão inicial das regras do projeto
+
+---
+
+## 13. Referências
+
+- [PHP PSR-12](https://www.php-fig.org/psr/psr-12/)
+- [MySQL Best Practices](https://dev.mysql.com/doc/refman/8.0/en/optimization.html)
+- [Font Awesome Icons](https://fontawesome.com/icons)
+
+---
+
+## 14. Testes Automatizados
+
+- **Testes de API**
+  - Arquivo `test_api_curl.php` para testar comunicação com APIs externas
+  - Verificar respostas e formatos de dados
+
+- **Verificação de Banco**
+  - Script `db_inspector.php` para validar estrutura do banco
+  - Verificar existência de tabelas e colunas necessárias
+
+---
+
+## 15. Regras Específicas do Projeto
+
+- **Estrutura de Diretórios**
+  - Arquivos de clientes: `uploads/clientes/Nome do cliente (ID X)/`
+  - Arquivos de sistema: raiz do projeto
+  - Includes: `includes/`
+  - Assets: `assets/css/`, `assets/js/`
+
+- **Nomenclatura de Arquivos**
+  - Scripts de alteração de banco: `add_[feature]_[type].sql`
+  - Páginas principais: nome descritivo (ex: `notifications.php`)
+  - Helpers: `[feature]_helper.php`
+
+---
+
+## 16. Configurações do Cline
+
+- **Modo de Operação**
+  - Preferir uso de ferramentas nativas do sistema
+  - Utilizar `apply_diff` para alterações pontuais
+  - Recorrer a `write_to_file` apenas quando necessário
+
+- **Fluxo de Trabalho**
+  1. Analisar estrutura existente
+  2. Propor alterações incrementais
+  3. Testar cada alteração
+  4. Documentar mudanças
+
+---
+
+## 17. Estrutura do Memory Bank
+
+- **Arquivo Principal**
+  - `memorybank.md`: Documentação central do sistema
+
+- **Seções Importantes**
+  - Principais Arquivos
+  - Estrutura do Banco de Dados
+  - Implementação de Segurança
+  - API de Comunicações Judiciais
+  - Serviços Ativos
+  - Padrões de Design e Estilo
+
+---
+
+## 18. Práticas de Documentação
+
+- **Comentários de Código**
+  - Explicar lógica complexa
+  - Documentar parâmetros e retornos
+  - Incluir exemplos de uso quando necessário
+
+- **Logs**
+  - Registrar operações críticas
+  - Incluir informações de contexto
+  - Usar níveis apropriados (INFO, WARNING, ERROR)
+
+---
+
+## 19. Regras de Segurança Adicionais
+
+- **Proteção de Sessão**
+  - Verificar autenticação em todas as páginas restritas
+  - Implementar timeout de sessão
+  - Usar tokens para operações sensíveis
+
+- **Acesso a Arquivos**
+  - Validar permissões antes de operações de arquivo
+  - Verificar tipos de arquivo permitidos
+  - Sanitizar nomes de arquivo
+
+---
+
+## 20. Considerações Finais
+
+- **Manutenção Contínua**
+  - Atualizar documentação ao fazer alterações
+  - Manter logs limpos e organizados
+  - Realizar backups regulares
+
+- **Colaboração**
+  - Seguir padrões estabelecidos
+  - Documentar alterações significativas
+  - Comunicar mudanças que afetam outros componentes

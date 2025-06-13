@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Client Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .list-group {
+            list-style: none;
+            padding: 0;
+        }
+        .list-group-item {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            margin-bottom: -1px;
+            background-color: #fff;
+        }
+        .client-item {
+            cursor: pointer;
+        }
+        .client-item:hover {
+            background-color: #f8f9fa;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .alert {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .alert-info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Client Selection</h1>
+    
+    <div class="form-section">
+        <h3>Resultados da Busca</h3>
+        <div class="form-group">
+            <label>Resultados similares:</label>
+            <ul class="list-group">
+                <li class="list-group-item client-item" 
+                    data-id="1" 
+                    onclick="selectClient(1, 'Cliente 1')">
+                    <i>👤</i> Cliente 1
+                </li>
+                <li class="list-group-item client-item" 
+                    data-id="2" 
+                    onclick="selectClient(2, 'Cliente 2')">
+                    <i>👤</i> Cliente 2
+                </li>
+                <li class="list-group-item client-item" 
+                    data-id="3" 
+                    onclick="selectClient(3, 'Cliente 3')">
+                    <i>👤</i> Cliente 3
+                </li>
+            </ul>
+            <div class="alert alert-info">
+                <i>ℹ️</i> Clique em um cliente para selecioná-lo automaticamente.
+            </div>
+        </div>
+    </div>
+    
+    <div class="form-section">
+        <h3>Dados do Processo</h3>
+        <form id="addProcessForm">
+            <div class="form-group">
+                <label for="id_cliente">Cliente</label>
+                <select id="id_cliente" name="id_cliente" class="form-select">
+                    <option value="">Selecione o cliente</option>
+                    <option value="1">Cliente 1</option>
+                    <option value="2">Cliente 2</option>
+                    <option value="3">Cliente 3</option>
+                    <option value="4">Cliente 4</option>
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Function to select a client from the search results
+        function selectClient(clientId, clientName) {
+            // Find the client dropdown
+            const clientSelect = document.getElementById('id_cliente');
+            
+            // Set the selected value
+            if (clientSelect) {
+                clientSelect.value = clientId;
+                
+                // Highlight the selected client in the list
+                const clientItems = document.querySelectorAll('.client-item');
+                clientItems.forEach(item => {
+                    if (parseInt(item.dataset.id) === clientId) {
+                        item.style.backgroundColor = '#d4edda';
+                        item.style.borderColor = '#c3e6cb';
+                        item.style.color = '#155724';
+                    } else {
+                        item.style.backgroundColor = '';
+                        item.style.borderColor = '';
+                        item.style.color = '';
+                    }
+                });
+                
+                // Scroll to the form
+                document.getElementById('addProcessForm').scrollIntoView({ behavior: 'smooth' });
+                
+                // Flash the select element to draw attention to it
+                clientSelect.style.backgroundColor = '#d4edda';
+                clientSelect.style.borderColor = '#c3e6cb';
+                
+                setTimeout(() => {
+                    clientSelect.style.backgroundColor = '';
+                    clientSelect.style.borderColor = '';
+                }, 1500);
+                
+                // Show a success message
+                const successMessage = document.createElement('div');
+                successMessage.className = 'alert alert-success';
+                successMessage.innerHTML = `<i>✅</i> Cliente "${clientName}" selecionado com sucesso!`;
+                
+                // Remove any existing success messages
+                const existingMessages = document.querySelectorAll('.alert-success');
+                existingMessages.forEach(msg => msg.remove());
+                
+                // Insert the message after the select element
+                clientSelect.parentNode.appendChild(successMessage);
+                
+                // Remove the message after 3 seconds
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>

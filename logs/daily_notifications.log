@@ -1,0 +1,164 @@
+[2025-05-15 15:09:54] Iniciando busca de intimações do dia anterior
+[2025-05-15 15:09:54] Data de referência: 2025-05-14
+[2025-05-15 15:11:02] Iniciando busca de intimações do dia anterior
+[2025-05-15 15:11:02] Data de referência: 2025-05-14
+[2025-05-15 15:11:02] Encontradas 3 empresas ativas
+[2025-05-15 15:11:02] Processando empresa: Janeri Angeloni (ID: 1)
+[2025-05-15 15:15:54] Iniciando busca de intimações do dia anterior
+[2025-05-15 15:15:54] Data de referência: 2025-05-14
+[2025-05-15 15:15:54] Encontradas 3 empresas ativas
+[2025-05-15 15:15:54] Processando empresa: Janeri Angeloni (ID: 1)
+[2025-05-15 15:15:54] Encontrados 2 advogados ativos na empresa Janeri Angeloni
+[2025-05-15 15:15:54] Buscando intimações para: Thais Angeloni (OAB 25695/CE)
+[2025-05-15 15:16:24] ERRO ao buscar intimações para Thais Angeloni: Erro ao consultar API de intimações: Operation timed out after 30001 milliseconds with 0 out of 0 bytes received
+[2025-05-15 15:16:24] Buscando intimações para: Laliani Correia de Arruda (OAB 54023/CE)
+[2025-05-15 15:16:54] ERRO ao buscar intimações para Laliani Correia de Arruda: Erro ao consultar API de intimações: Operation timed out after 30001 milliseconds with 0 out of 0 bytes received
+[2025-05-15 15:16:54] Processando empresa: Teste (ID: 6)
+[2025-05-15 15:16:54] Encontrados 0 advogados ativos na empresa Teste
+[2025-05-15 15:16:54] Processando empresa: Urqueta Ceara (ID: 7)
+[2025-05-15 15:16:54] Encontrados 1 advogados ativos na empresa Urqueta Ceara
+[2025-05-15 15:16:54] Buscando intimações para: Julio Urqueta (OAB 49944/CE)
+[2025-05-15 15:17:24] ERRO ao buscar intimações para Julio Urqueta: Erro ao consultar API de intimações: Operation timed out after 30001 milliseconds with 0 out of 0 bytes received
+[2025-05-15 15:17:24] Processo concluído. Total: 3 advogados processados, 0 novas intimações salvas.
+[2025-05-15 15:20:23] [INFO] Iniciando busca de intimações para a data: 2025-05-14
+[2025-05-15 15:20:23] [DEBUG] Timeout da API configurado para 60 segundos
+[2025-05-15 15:20:23] [DEBUG] Proxy configurado: 200.234.178.126:59100
+[2025-05-15 15:20:23] [INFO] Encontradas 3 empresas ativas
+[2025-05-15 15:20:23] [INFO] Processando empresa: Janeri Angeloni (ID: 1)
+[2025-05-15 15:20:23] [INFO] Encontrados 2 advogados ativos na empresa Janeri Angeloni
+[2025-05-15 15:20:23] [INFO] Buscando intimações para: Thais Angeloni (OAB 25695/CE)
+[2025-05-15 15:20:23] [DEBUG] Filtros para Thais Angeloni: {"oab_numero":"25695","oab_uf":"CE","advogado_nome":"Thais Angeloni","data_inicio":"2025-05-14","data_fim":"2025-05-14"}
+[2025-05-15 15:20:53] [ERROR] ERRO ao buscar intimações para Thais Angeloni: Erro ao consultar API de intimações: Operation timed out after 30000 milliseconds with 0 out of 0 bytes received
+[2025-05-15 15:20:53] [INFO] Buscando intimações para: Laliani Correia de Arruda (OAB 54023/CE)
+[2025-05-15 15:20:53] [DEBUG] Filtros para Laliani Correia de Arruda: {"oab_numero":"54023","oab_uf":"CE","advogado_nome":"Laliani Correia de Arruda","data_inicio":"2025-05-14","data_fim":"2025-05-14"}
+[2025-05-15 15:21:23] [ERROR] ERRO ao buscar intimações para Laliani Correia de Arruda: Erro ao consultar API de intimações: Operation timed out after 30000 milliseconds with 0 out of 0 bytes received
+[2025-05-15 15:21:23] [INFO] Processando empresa: Teste (ID: 6)
+[2025-05-15 15:21:23] [INFO] Encontrados 0 advogados ativos na empresa Teste
+[2025-05-15 15:21:23] [INFO] Processando empresa: Urqueta Ceara (ID: 7)
+[2025-05-15 15:21:23] [INFO] Encontrados 1 advogados ativos na empresa Urqueta Ceara
+[2025-05-15 15:21:23] [INFO] Buscando intimações para: Julio Urqueta (OAB 49944/CE)
+[2025-05-15 15:21:23] [DEBUG] Filtros para Julio Urqueta: {"oab_numero":"49944","oab_uf":"CE","advogado_nome":"Julio Urqueta","data_inicio":"2025-05-14","data_fim":"2025-05-14"}
+[2025-05-15 15:21:53] [ERROR] ERRO ao buscar intimações para Julio Urqueta: Erro ao consultar API de intimações: Operation timed out after 30000 milliseconds with 0 out of 0 bytes received
+[2025-05-15 15:21:53] [INFO] Processo concluído. Data: 2025-05-14, Total: 3 advogados processados, 0 novas intimações salvas.
+[2025-05-15 15:21:53] [DEBUG] Uso máximo de memória: 2.00 MB
+[2025-05-15 15:21:53] [DEBUG] Tempo de execução: 90.01 segundos
+[2025-05-15 15:37:05] [INFO] Iniciando busca de intimações para a data: 2025-05-14
+[2025-05-15 15:37:05] [DEBUG] Timeout da API configurado para 600 segundos
+[2025-05-15 15:37:05] [DEBUG] Proxy configurado: 200.234.178.126:59100
+[2025-05-15 15:37:05] [INFO] Encontradas 3 empresas ativas
+[2025-05-15 15:37:05] [INFO] Processando empresa: Janeri Angeloni (ID: 1)
+[2025-05-15 15:37:05] [INFO] Encontrados 2 advogados ativos na empresa Janeri Angeloni
+[2025-05-15 15:37:05] [INFO] Buscando intimações para: Thais Angeloni (OAB 25695/CE)
+[2025-05-15 15:37:05] [DEBUG] Filtros para Thais Angeloni: {"oab_numero":"25695","oab_uf":"CE","advogado_nome":"Thais Angeloni","data_inicio":"2025-05-14","data_fim":"2025-05-14"}
+[2025-05-15 15:37:45] [INFO] Iniciando busca de intimações para a data: 2025-05-14
+[2025-05-15 15:37:45] [DEBUG] Timeout da API configurado para 600 segundos
+[2025-05-15 15:37:45] [DEBUG] Proxy configurado: 200.234.178.126:59100
+[2025-05-15 15:37:45] [INFO] Encontradas 3 empresas ativas
+[2025-05-15 15:37:45] [INFO] Processando empresa: Janeri Angeloni (ID: 1)
+[2025-05-15 15:37:45] [INFO] Encontrados 2 advogados ativos na empresa Janeri Angeloni
+[2025-05-15 15:37:45] [INFO] Buscando intimações para: Thais Angeloni (OAB 25695/CE)
+[2025-05-15 15:37:45] [DEBUG] Filtros para Thais Angeloni: {"oab_numero":"25695","oab_uf":"CE","advogado_nome":"Thais Angeloni","data_inicio":"2025-05-14","data_fim":"2025-05-14"}
+[2025-05-15 15:38:15] [INFO] Iniciando busca de intimações para a data: 2025-05-14
+[2025-05-15 15:38:15] [DEBUG] Timeout da API configurado para 120 segundos
+[2025-05-15 15:38:15] [DEBUG] Proxy configurado: 200.234.178.126:59100
+[2025-05-15 15:38:15] [INFO] Encontradas 3 empresas ativas
+[2025-05-15 15:38:15] [INFO] Processando empresa: Janeri Angeloni (ID: 1)
+[2025-05-15 15:38:15] [INFO] Encontrados 2 advogados ativos na empresa Janeri Angeloni
+[2025-05-15 15:38:15] [INFO] Buscando intimações para: Thais Angeloni (OAB 25695/CE)
+[2025-05-15 15:38:15] [DEBUG] Filtros para Thais Angeloni: {"oab_numero":"25695","oab_uf":"CE","advogado_nome":"Thais Angeloni","data_inicio":"2025-05-14","data_fim":"2025-05-14"}
+[2025-05-15 15:38:45] [ERROR] ERRO ao buscar intimações para Thais Angeloni: Erro ao consultar API de intimações: Operation timed out after 30001 milliseconds with 0 out of 0 bytes received
+[2025-05-15 15:38:45] [INFO] Buscando intimações para: Laliani Correia de Arruda (OAB 54023/CE)
+[2025-05-15 15:38:45] [DEBUG] Filtros para Laliani Correia de Arruda: {"oab_numero":"54023","oab_uf":"CE","advogado_nome":"Laliani Correia de Arruda","data_inicio":"2025-05-14","data_fim":"2025-05-14"}
+[2025-05-15 15:39:15] [ERROR] ERRO ao buscar intimações para Laliani Correia de Arruda: Erro ao consultar API de intimações: Operation timed out after 30001 milliseconds with 0 out of 0 bytes received
+[2025-05-15 15:39:15] [INFO] Processando empresa: Teste (ID: 6)
+[2025-05-15 15:39:15] [INFO] Encontrados 0 advogados ativos na empresa Teste
+[2025-05-15 15:39:15] [INFO] Processando empresa: Urqueta Ceara (ID: 7)
+[2025-05-15 15:39:15] [INFO] Encontrados 1 advogados ativos na empresa Urqueta Ceara
+[2025-05-15 15:39:15] [INFO] Buscando intimações para: Julio Urqueta (OAB 49944/CE)
+[2025-05-15 15:39:15] [DEBUG] Filtros para Julio Urqueta: {"oab_numero":"49944","oab_uf":"CE","advogado_nome":"Julio Urqueta","data_inicio":"2025-05-14","data_fim":"2025-05-14"}
+[2025-05-15 15:39:45] [ERROR] ERRO ao buscar intimações para Julio Urqueta: Erro ao consultar API de intimações: Operation timed out after 30000 milliseconds with 0 out of 0 bytes received
+[2025-05-15 15:39:45] [INFO] Processo concluído. Data: 2025-05-14, Total: 3 advogados processados, 0 novas intimações salvas.
+[2025-05-15 15:39:45] [DEBUG] Uso máximo de memória: 2.00 MB
+[2025-05-15 15:39:45] [DEBUG] Tempo de execução: 90.01 segundos
+[2025-05-15 15:45:47] [INFO] Iniciando busca de intimações para a data: 2025-05-14
+[2025-05-15 15:45:47] [INFO] Encontradas 3 empresas ativas
+[2025-05-15 15:45:47] [INFO] Processando empresa: Janeri Angeloni (ID: 1)
+[2025-05-15 15:45:47] [INFO] Encontrados 2 advogados ativos na empresa Janeri Angeloni
+[2025-05-15 15:45:47] [INFO] Buscando intimações para: Thais Angeloni (OAB 25695/CE)
+[2025-05-15 15:45:58] [INFO] Encontradas 11 intimações para Thais Angeloni
+[2025-05-15 15:45:58] [INFO] Salvas 9 novas intimações para Thais Angeloni
+[2025-05-15 15:46:00] [INFO] Buscando intimações para: Laliani Correia de Arruda (OAB 54023/CE)
+[2025-05-15 15:46:01] [INFO] Encontradas 0 intimações para Laliani Correia de Arruda
+[2025-05-15 15:46:01] [INFO] Salvas 0 novas intimações para Laliani Correia de Arruda
+[2025-05-15 15:46:03] [INFO] Processando empresa: Teste (ID: 6)
+[2025-05-15 15:46:03] [INFO] Encontrados 0 advogados ativos na empresa Teste
+[2025-05-15 15:46:03] [INFO] Processando empresa: Urqueta Ceara (ID: 7)
+[2025-05-15 15:46:03] [INFO] Encontrados 1 advogados ativos na empresa Urqueta Ceara
+[2025-05-15 15:46:03] [INFO] Buscando intimações para: Julio Urqueta (OAB 49944/CE)
+[2025-05-15 15:46:08] [INFO] Encontradas 0 intimações para Julio Urqueta
+[2025-05-15 15:46:08] [INFO] Salvas 0 novas intimações para Julio Urqueta
+[2025-05-15 15:46:10] [INFO] Processo concluído. Data: 2025-05-14, Total: 3 advogados processados, 9 novas intimações salvas.
+[2025-05-15 16:31:30] [INFO] Iniciando busca de intimações para a data: 2025-05-14
+[2025-05-15 16:31:30] [INFO] Encontradas 3 empresas ativas
+[2025-05-15 16:31:30] [INFO] Processando empresa: Janeri Angeloni (ID: 1)
+[2025-05-15 16:31:30] [INFO] Encontrados 2 advogados ativos na empresa Janeri Angeloni
+[2025-05-15 16:31:30] [INFO] Buscando intimações para: Thais Angeloni (OAB 25695/CE)
+[2025-05-15 16:31:31] [INFO] Encontradas 11 intimações para Thais Angeloni
+[2025-05-15 16:31:31] [INFO] Salvas 0 novas intimações para Thais Angeloni
+[2025-05-15 16:31:33] [INFO] Buscando intimações para: Laliani Correia de Arruda (OAB 54023/CE)
+[2025-05-15 16:31:34] [INFO] Encontradas 0 intimações para Laliani Correia de Arruda
+[2025-05-15 16:31:34] [INFO] Salvas 0 novas intimações para Laliani Correia de Arruda
+[2025-05-15 16:31:36] [INFO] Processando empresa: Teste (ID: 6)
+[2025-05-15 16:31:36] [INFO] Encontrados 0 advogados ativos na empresa Teste
+[2025-05-15 16:31:36] [INFO] Processando empresa: Urqueta Ceara (ID: 7)
+[2025-05-15 16:31:36] [INFO] Encontrados 1 advogados ativos na empresa Urqueta Ceara
+[2025-05-15 16:31:36] [INFO] Buscando intimações para: Julio Urqueta (OAB 49944/CE)
+[2025-05-15 16:31:36] [INFO] Encontradas 0 intimações para Julio Urqueta
+[2025-05-15 16:31:36] [INFO] Salvas 0 novas intimações para Julio Urqueta
+[2025-05-15 16:31:38] [INFO] Processo concluído. Data: 2025-05-14, Total: 3 advogados processados, 0 novas intimações salvas.
+[2025-05-15 18:21:54] [INFO] Iniciando busca de intimações para a data: 2025-05-14
+[2025-05-15 18:21:54] [DEBUG] Timeout da API configurado para 60 segundos
+[2025-05-15 18:21:54] [DEBUG] Proxy configurado: 200.234.178.126:59101 (SOCKS5)
+[2025-05-15 18:21:54] [INFO] Encontradas 3 empresas ativas
+[2025-05-15 18:21:54] [INFO] Processando empresa: Janeri Angeloni (ID: 1)
+[2025-05-15 18:21:54] [INFO] Encontrados 2 advogados ativos na empresa Janeri Angeloni
+[2025-05-15 18:21:54] [INFO] Buscando intimações para: Thais Angeloni (OAB 25695/CE)
+[2025-05-15 18:21:54] [DEBUG] Filtros para Thais Angeloni: {"oab_numero":"25695","oab_uf":"CE","advogado_nome":"Thais Angeloni","data_inicio":"2025-05-14","data_fim":"2025-05-14"}
+[2025-05-15 18:21:55] [INFO] Encontradas 11 intimações para Thais Angeloni
+[2025-05-15 18:21:55] [DEBUG] Primeiras intimações: [{"numero_processo":"00006172820235070003","classe":"A\u00e7\u00e3O TRABALHISTA - RITO ORDIN\u00e1RIO","tribunal":"TRT7","advogados":"MARYANA CORDEIRO BATISTA (OAB 480346\/SP), THAIS ANGELONI FONTENELE (OAB 25695\/CE), LUIZ CARLOS NOGUEIRA DE SOUZA (OAB 47601\/CE)","data_publicacao":"2025-05-14","teor":"PODER JUDICI\u00c1RIO  JUSTI\u00c7A DO TRABALHO  TRIBUNAL REGIONAL DO TRABALHO DA 7\u00aa REGI\u00c3O  3\u00aa VARA DO TRABALHO DE FORTALEZA   0000617-28.2023.5.07.0003  : CLAUDENESIO DE SOUSA COSTA  : CARLOS SERGIO SOARES DOS SANTOS ME  INTIMA\u00c7\u00c3O  Fica V. Sa. intimado para tomar ci\u00eancia do Despacho ID b7158cc proferido nos autos.  CONCLUS\u00c3O Nesta data, 13 de maio de 2025, eu, ANA PAULA LOPES DUARTE, fa\u00e7o conclusos os presentes autos ao(\u00e0) Exmo(a). Sr.(\u00aa) Juiz(\u00edza) do Trabalho desta Vara.  DESPACHO Vistos etc.  Ante a in\u00e9rcia da Reclamada em comprovar o recolhimento da contribui\u00e7\u00e3o previdenci\u00e1ria, proceda-se ao bloqueio eletr\u00f4nico via SISBAJUD.  *A autenticidade do presente expediente pode ser confirmada atrav\u00e9s de consulta ao site https:\/\/pje.trt7.jus.br\/pjekz\/validacao, digitando o \u00a0n\u00famero\u00a0do documento que se encontra ao seu final.  FORTALEZA\/CE, 13 de maio de 2025.  RONALDO SOLANO FEITOSA  Juiz do Trabalho Titular<br><br>Intimado(s) \/ Citado(s)<br> - CLAUDENESIO DE SOUSA COSTA<br>","texto":"PODER JUDICI\u00c1RIO  JUSTI\u00c7A DO TRABALHO  TRIBUNAL REGIONAL DO TRABALHO DA 7\u00aa REGI\u00c3O  3\u00aa VARA DO TRABALHO DE FORTALEZA   0000617-28.2023.5.07.0003  : CLAUDENESIO DE SOUSA COSTA  : CARLOS SERGIO SOARES DOS SANTOS ME  INTIMA\u00c7\u00c3O  Fica V. Sa. intimado para tomar ci\u00eancia do Despacho ID b7158cc proferido nos autos.  CONCLUS\u00c3O Nesta data, 13 de maio de 2025, eu, ANA PAULA LOPES DUARTE, fa\u00e7o conclusos os presentes autos ao(\u00e0) Exmo(a). Sr.(\u00aa) Juiz(\u00edza) do Trabalho desta Vara.  DESPACHO Vistos etc.  Ante a in\u00e9rcia da Reclamada em comprovar o recolhimento da contribui\u00e7\u00e3o previdenci\u00e1ria, proceda-se ao bloqueio eletr\u00f4nico via SISBAJUD.  *A autenticidade do presente expediente pode ser confirmada atrav\u00e9s de consulta ao site https:\/\/pje.trt7.jus.br\/pjekz\/validacao, digitando o \u00a0n\u00famero\u00a0do documento que se encontra ao seu final.  FORTALEZA\/CE, 13 de maio de 2025.  RONALDO SOLANO FEITOSA  Juiz do Trabalho Titular<br><br>Intimado(s) \/ Citado(s)<br> - CLAUDENESIO DE SOUSA COSTA<br>","in_database":true},{"numero_processo":"00006172820235070003","classe":"A\u00e7\u00e3O TRABALHISTA - RITO ORDIN\u00e1RIO","tribunal":"TRT7","advogados":"THAIS ANGELONI FONTENELE (OAB 25695\/CE), LUIZ CARLOS NOGUEIRA DE SOUZA (OAB 47601\/CE), MARYANA CORDEIRO BATISTA (OAB 480346\/SP)","data_publicacao":"2025-05-14","teor":"PODER JUDICI\u00c1RIO  JUSTI\u00c7A DO TRABALHO  TRIBUNAL REGIONAL DO TRABALHO DA 7\u00aa REGI\u00c3O  3\u00aa VARA DO TRABALHO DE FORTALEZA   0000617-28.2023.5.07.0003  : CLAUDENESIO DE SOUSA COSTA  : CARLOS SERGIO SOARES DOS SANTOS ME  INTIMA\u00c7\u00c3O  Fica V. Sa. intimado para tomar ci\u00eancia do Despacho ID b7158cc proferido nos autos.  CONCLUS\u00c3O Nesta data, 13 de maio de 2025, eu, ANA PAULA LOPES DUARTE, fa\u00e7o conclusos os presentes autos ao(\u00e0) Exmo(a). Sr.(\u00aa) Juiz(\u00edza) do Trabalho desta Vara.  DESPACHO Vistos etc.  Ante a in\u00e9rcia da Reclamada em comprovar o recolhimento da contribui\u00e7\u00e3o previdenci\u00e1ria, proceda-se ao bloqueio eletr\u00f4nico via SISBAJUD.  *A autenticidade do presente expediente pode ser confirmada atrav\u00e9s de consulta ao site https:\/\/pje.trt7.jus.br\/pjekz\/validacao, digitando o \u00a0n\u00famero\u00a0do documento que se encontra ao seu final.  FORTALEZA\/CE, 13 de maio de 2025.  RONALDO SOLANO FEITOSA  Juiz do Trabalho Titular<br><br>Intimado(s) \/ Citado(s)<br> - CARLOS SERGIO SOARES DOS SANTOS ME<br>","texto":"PODER JUDICI\u00c1RIO  JUSTI\u00c7A DO TRABALHO  TRIBUNAL REGIONAL DO TRABALHO DA 7\u00aa REGI\u00c3O  3\u00aa VARA DO TRABALHO DE FORTALEZA   0000617-28.2023.5.07.0003  : CLAUDENESIO DE SOUSA COSTA  : CARLOS SERGIO SOARES DOS SANTOS ME  INTIMA\u00c7\u00c3O  Fica V. Sa. intimado para tomar ci\u00eancia do Despacho ID b7158cc proferido nos autos.  CONCLUS\u00c3O Nesta data, 13 de maio de 2025, eu, ANA PAULA LOPES DUARTE, fa\u00e7o conclusos os presentes autos ao(\u00e0) Exmo(a). Sr.(\u00aa) Juiz(\u00edza) do Trabalho desta Vara.  DESPACHO Vistos etc.  Ante a in\u00e9rcia da Reclamada em comprovar o recolhimento da contribui\u00e7\u00e3o previdenci\u00e1ria, proceda-se ao bloqueio eletr\u00f4nico via SISBAJUD.  *A autenticidade do presente expediente pode ser confirmada atrav\u00e9s de consulta ao site https:\/\/pje.trt7.jus.br\/pjekz\/validacao, digitando o \u00a0n\u00famero\u00a0do documento que se encontra ao seu final.  FORTALEZA\/CE, 13 de maio de 2025.  RONALDO SOLANO FEITOSA  Juiz do Trabalho Titular<br><br>Intimado(s) \/ Citado(s)<br> - CARLOS SERGIO SOARES DOS SANTOS ME<br>","in_database":true}]
+[2025-05-15 18:21:55] [INFO] Salvas 0 novas intimações para Thais Angeloni
+[2025-05-15 18:21:55] [DEBUG] Aguardando 2 segundos antes da próxima requisição...
+[2025-05-15 18:21:57] [INFO] Buscando intimações para: Laliani Correia de Arruda (OAB 54023/CE)
+[2025-05-15 18:21:57] [DEBUG] Filtros para Laliani Correia de Arruda: {"oab_numero":"54023","oab_uf":"CE","advogado_nome":"Laliani Correia de Arruda","data_inicio":"2025-05-14","data_fim":"2025-05-14"}
+[2025-05-15 18:21:58] [INFO] Encontradas 0 intimações para Laliani Correia de Arruda
+[2025-05-15 18:21:58] [INFO] Salvas 0 novas intimações para Laliani Correia de Arruda
+[2025-05-15 18:21:58] [DEBUG] Aguardando 2 segundos antes da próxima requisição...
+[2025-05-15 18:22:00] [INFO] Processando empresa: Teste (ID: 6)
+[2025-05-15 18:22:00] [INFO] Encontrados 0 advogados ativos na empresa Teste
+[2025-05-15 18:22:00] [INFO] Processando empresa: Urqueta Ceara (ID: 7)
+[2025-05-15 18:22:00] [INFO] Encontrados 1 advogados ativos na empresa Urqueta Ceara
+[2025-05-15 18:22:00] [INFO] Buscando intimações para: Julio Urqueta (OAB 49944/CE)
+[2025-05-15 18:22:00] [DEBUG] Filtros para Julio Urqueta: {"oab_numero":"49944","oab_uf":"CE","advogado_nome":"Julio Urqueta","data_inicio":"2025-05-14","data_fim":"2025-05-14"}
+[2025-05-15 18:22:00] [INFO] Encontradas 0 intimações para Julio Urqueta
+[2025-05-15 18:22:00] [INFO] Salvas 0 novas intimações para Julio Urqueta
+[2025-05-15 18:22:00] [DEBUG] Aguardando 2 segundos antes da próxima requisição...
+[2025-05-15 18:22:02] [INFO] Processo concluído. Data: 2025-05-14, Total: 3 advogados processados, 0 novas intimações salvas.
+[2025-05-15 18:22:02] [DEBUG] Uso máximo de memória: 2.00 MB
+[2025-05-15 18:22:02] [DEBUG] Tempo de execução: 7.98 segundos
+[2025-05-16 11:08:48] [INFO] Iniciando busca de intimações para a data: 2025-05-15
+[2025-05-16 11:08:48] [INFO] Encontradas 3 empresas ativas
+[2025-05-16 11:08:48] [INFO] Processando empresa: Janeri Angeloni (ID: 1)
+[2025-05-16 11:08:48] [INFO] Encontrados 2 advogados ativos na empresa Janeri Angeloni
+[2025-05-16 11:08:48] [INFO] Buscando intimações para: Thais Angeloni (OAB 25695/CE)
+[2025-05-16 11:09:48] [ERROR] ERRO ao buscar intimações para Thais Angeloni: Erro ao consultar API de intimações: Operation timed out after 60000 milliseconds with 0 bytes received (Código: 28)
+[2025-05-16 11:09:48] [INFO] Buscando intimações para: Laliani Correia de Arruda (OAB 54023/CE)
+[2025-05-16 11:10:35] [ERROR] ERRO ao buscar intimações para Laliani Correia de Arruda: API retornou status code inválido: 500 - Resposta: {
+    "message": "Server Error"
+}
+[2025-05-16 11:10:35] [INFO] Processando empresa: Teste (ID: 6)
+[2025-05-16 11:10:35] [INFO] Encontrados 0 advogados ativos na empresa Teste
+[2025-05-16 11:10:35] [INFO] Processando empresa: Urqueta Ceara (ID: 7)
+[2025-05-16 11:10:35] [INFO] Encontrados 1 advogados ativos na empresa Urqueta Ceara
+[2025-05-16 11:10:35] [INFO] Buscando intimações para: Julio Urqueta (OAB 49944/CE)
+[2025-05-16 11:11:35] [ERROR] ERRO ao buscar intimações para Julio Urqueta: Erro ao consultar API de intimações: Operation timed out after 60000 milliseconds with 0 bytes received (Código: 28)
+[2025-05-16 11:11:35] [INFO] Processo concluído. Data: 2025-05-15, Total: 3 advogados processados, 0 novas intimações salvas.

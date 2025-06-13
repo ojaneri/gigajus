@@ -1,0 +1,10 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsdl="www.contatodiario.com.br?wsdl">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <wsdl:getRecords>
+         <username>959805</username>
+         <password>173378</password>
+         <datetime>20240808000000</datetime>
+      </wsdl:getRecords>
+   </soapenv:Body>
+</soapenv:Envelope>

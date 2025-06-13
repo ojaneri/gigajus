@@ -1,0 +1,81 @@
+/* 
+ * Estilos para o tour guiado do sistema
+ */
+
+/* Botão de tour */
+.tour-button-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+#tour-button {
+    background-color: var(--btn-primary-bg);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+#tour-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+#tour-button i {
+    font-size: 16px;
+}
+
+/* Personalização do Intro.js */
+.introjs-tooltip {
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.introjs-helperLayer {
+    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
+}
+
+.introjs-tooltiptext {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.introjs-button {
+    border-radius: 4px;
+    font-size: 13px;
+    padding: 6px 12px;
+}
+
+.introjs-progress {
+    margin-top: 10px;
+}
+
+.introjs-progressbar {
+    background-color: var(--btn-primary-bg);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .tour-button-container {
+        top: 10px;
+        right: 10px;
+    }
+    
+    #tour-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    #tour-button i {
+        font-size: 14px;
+    }
+}

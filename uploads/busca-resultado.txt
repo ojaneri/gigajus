@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="www.contatodiario.com.br?wsdl"><SOAP-ENV:Body><ns1:getRecordsResponse xmlns:ns1="www.contatodiario.com.br?wsdl"><Registers xsi:type="SOAP-ENC:Array" SOAP-ENC:arrayType="tns:Register[24]"><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25364087</cdLancamento><dtPublicacao xsi:type="xsd:string">09/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">08/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 06:53:23</dtAtualizacao><nrProcesso xsi:type="xsd:string">0002407-17.2024.8.26.0073</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">São Paulo - TJ - Caderno 4 - I</nmJornal><nrDiario xsi:type="xsd:string">4024</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO ELETRÔNICO DA JUSTIÇA
+PODER JUDICIÁRIO DO ESTADO DE SÃO PAULO
+CADERNO 4 - JUDICIAL - 1ª INSTÂNCIA
+INTERIOR - PARTE I
+
+COMARCA DE AVARÉ 
+
+RELAÇÃO DOS FEITOS CÍVEIS DISTRIBUÍDOS ÀS VARAS DO FORO DE AVARÉ EM 06/08/2024 
+
+PROCESSO : 0002407-17.2024.8.26.0073 
+CLASSE : PROCEDIMENTO COMUM CÍVEL 
+REQTE : Conceição Aparecida Oliveira 
+ADVOGADO &amp;amp;ltspan style=&amp;amp;quotbackground-color: yellow font-weight: bold&amp;amp;quot&amp;amp;gt: 25695/CE -&amp;amp;lt/span&amp;amp;gt THAIS ANGELONI 
+REQDO : BANCO SANTANDER S.A. 
+VARA: 1ª VARA CÍVEL</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25364088</cdLancamento><dtPublicacao xsi:type="xsd:string">09/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">08/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 06:53:23</dtAtualizacao><nrProcesso xsi:type="xsd:string">0002407-17.2024.8.26.0073</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">São Paulo - TJ - Caderno 4 - I</nmJornal><nrDiario xsi:type="xsd:string">4024</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO ELETRÔNICO DA JUSTIÇA
+PODER JUDICIÁRIO DO ESTADO DE SÃO PAULO
+CADERNO 4 - JUDICIAL - 1ª INSTÂNCIA
+INTERIOR - PARTE I
+
+COMARCA DE AVARÉ 
+
+JUÍZO DE DIREITO DA 1ª VARA CÍVEL 
+EDITAL DE INTIMAÇÃO DE PARTES E ADVOGADOS 
+RELAÇÃO Nº 0618/2024 
+
+Processo 0002407-17.2024.8.26.0073 - Procedimento Comum Cível - Empréstimo consignado - Conceição Aparecida 
+Oliveira - Vistos, O art.5º, LXXIV, da Constituição Federal, dispõe &amp;amp;quoto Estado prestará assistência jurídica integral e gratuita aos 
+que comprovarem insuficiência de recursos&amp;amp;quot. Embora para a concessão da gratuidade não se exija o estado de miséria absoluta, 
+é necessária a comprovação da impossibilidade de arcar com as custas e despesas do processo sem prejuízo de seu sustento 
+próprio ou de sua família. A declaração de pobreza, por sua vez, estabelece mera presunção relativa da hipossuficiência, que 
+cede ante outros elementos que sirvam para indicar a capacidade financeira. Antes de indeferir o pedido, contudo, convém 
+facultar ao interessado o direito de provar a impossibilidade de arcar, sem o seu próprio prejuízo ou de sua família, com as 
+custas e despesas do processo. Assim, para apreciação do pedido de Justiça Gratuita, a parte requerente deverá, em 10 (dez) 
+dias, apresentar, sob pena de indeferimento do benefício: a) os três últimos comprovantes de rendimentos, imediatamente 
+anteriores à data do protocolo da petição b) cópia dos extratos bancários de contas de titularidade, dos últimos três meses c) 
+cópia dos extratos de cartão de crédito, dos últimos três meses d) cópia da última declaração do imposto de renda apresentada 
+à Secretaria da Receita Federal ou, no caso de isenção, deverá a parte juntar declaração escrita e assinada pela própria 
+autora no sentido de que não declara rendas ao Fisco. Ou, no mesmo prazo, deverá recolher as custas judiciais e despesas 
+processuais, sob pena de extinção, sem nova intimação. Int. - ADV: THAIS ANGELONI (&amp;amp;ltspan style=&amp;amp;quotbackground-color: yellow font-weight: bold&amp;amp;quot&amp;amp;gtOAB 25695/CE&amp;amp;lt/span&amp;amp;gt)</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367828</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0200131-09.2024.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+Nº 0200131-09.2024.8.06.0001 - Apelação Cível - Fortaleza - Apte/Apdo: Maria Helena Pinto de Alexandria - Apte/Apdo: 
+Banco Bradesco Financiamentos S/A - Recorrente/Rec: Banco Bradesco S/A - Des. MARIA DE FÁTIMA DE MELO LOUREIRO 
+- Conheceram do recurso, para, no mérito, dar-lhe provimento conforme acórdão lavrado. - por unanimidade. - EMENTA: 
+APELAÇÕES CÍVEIS. AÇÃO DECLARATÓRIA DE NULIDADE/CANCELAMENTO DE CONTRATO BANCÁRIO E INDENIZAÇÃO 
+POR DANOS MORAIS. EMPRÉSTIMO CONSIGNADO. PRELIMINAR. CERCEAMENTO DE DEFESA. QUESTIONAMENTO 
+QUANTO À AUTENTICIDADE DA ASSINATURA APRESENTADA NOS DOCUMENTOS DE CONTRATAÇÃO. JULGAMENTO 
+ANTECIPADO DA LIDE SEM O SANEAMENTO DO FEITO. NECESSIDADE DE PERÍCIA GRAFOTÉCNICA. CERCEAMENTO DE 
+DEFESA CONFIGURADO. RECURSO AUTORAL CONHECIDO E PROVIDO. RECURSO DA PARTE PROMOVIDA CONHECIDO 
+E PREJUDICADO.1. PRELIMINAR. CERCEAMENTO DE DEFESA. A PARTE AUTORA, EM PETITÓRIO DE FLS. 163-173, 
+REBATEU A AUTENTICIDADE DA DOCUMENTAÇÃO TRAZIDA À BAILA, BEM COMO PUGNOU, SUBSIDIARIAMENTE, 
+PELA PRODUÇÃO DE PROVA PERICIAL, SUSCITANDO, ASSIM, QUE &amp;amp;quotCASO OS DOCUMENTOS SEJAM VALORADOS 
+COMO PROVA E A DEMANDADA TENHA REQUERIDO, QUE SEJA DEFERIDA A PROVA TÉCNICA CONFORME O CASO 
+(PERÍCIA DOCUMENTOSCÓPICA E GRAFOTÉCNICA PARA CONTRATOS FÍSICOS E COMPUTACIONAL PARA CONTRATOS 
+DIGITAIS)&amp;amp;quot (FL.173). NO ENTANTO, O JUÍZO PRIMEVO PROFERIU SENTENÇA DE MÉRITO, CONCLUINDO PELA VALIDADE 
+DO CONTRATO DE Nº. 815899412, DEIXANDO DE SE MANIFESTAR QUANTO A PROVA REQUERIDA, CARACTERIZANDO 
+ERROR IN PROCEDENDO.2. QUANDO A DECISÃO CENTRAL DA DEMANDA DEPENDER DE ANÁLISE TÉCNICA DA PROVA, 
+A REALIZAÇÃO DE EXAME PERICIAL NÃO PODE SER SUBSTITUÍDA PELA APRECIAÇÃO SUBJETIVA DO MAGISTRADO. 
+PORTANTO, APENAS UM EXAME PERICIAL REALIZADO POR UM PROFISSIONAL CAPACITADO PODERÁ ESCLARECER A 
+QUESTÃO E FORNECER AO JUIZ AS BASES NECESSÁRIAS PARA FORMAR SUA CONVICÇÃO SOBRE A PROCEDÊNCIA, 
+OU NÃO, DA PRETENSÃO AUTORAL.3. RECURSO DA PARTE AUTORA CONHECIDO E PROVIDO. RECURSO DA PARTE 
+PROMOVIDA CONHECIDO E PREJUDICADO. ACÓRDÃO VISTOS, RELATADOS E DISCUTIDOS ESTES AUTOS, ACORDA 
+A 2ª CÂMARA DIREITO PRIVADO DO TRIBUNAL DE JUSTIÇA DO ESTADO DO CEARÁ, UNANIMEMENTE, CONHECER O 
+RECURSO PROTOCOLADO PELA PARTE AUTORA, PARA DAR-LHE PROVIMENTO, BEM COMO CONHECER DO RECURSO 
+DA PARTE REQUERIDA, PARA DECLARÁ-LO PREJUDICADO, NOS TERMOS DO VOTO DA RELATORA. . - Advs: Thais de 
+Mendonça Angeloni (OAB: 25695/CE) - Antônio de Moraes Dourado Neto (OAB: 30142/CE)</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367829</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0627547-84.2024.8.06.0000</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+Nº 0627547-84.2024.8.06.0000 - Agravo de Instrumento - Fortaleza - Agravante: Lucy Maria de Oliveira Furlan - Agravado: 
+Banco Itaú Consignado S/A - Agravado: Banco Cetelem S/A - Dispositivo. Diante de tudo que acima foi exposto e fundamentado 
+e por não verificar a probabilidade do direito da recorrente, conheço o recurso para negar provimento. Expedientes necessários. 
+Fortaleza, 31 de julho de 2024. FRANCISCO LUCÍDIO DE QUEIROZ JÚNIOR Desembargador Relator - Advs: Thais de 
+Mendonça Angeloni (OAB: 25695/CE) - Henrique José Parada Simão (OAB: 221386/SP)</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367830</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0627796-35.2024.8.06.0000</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+Nº 0627796-35.2024.8.06.0000 - Agravo de Instrumento - Fortaleza - Agravante: Jurandi Cana Verde da Silva - Agravado: 
+Banco Itaú Consignado S/A - Dispositivo. Ante as considerações acima expendidas, e por não verificar a probabilidade do 
+direito do recorrente, conheço o recurso para negar provimento. Expedientes necessários. Fortaleza, 31 de julho de 2024. 
+FRANCISCO LUCÍDIO DE QUEIROZ JÚNIOR Desembargador Relator - Advs: Thais de Mendonça Angeloni (OAB: 25695/CE) - 
+Nelson Monteiro de Carvalho Neto (OAB: 60359/RJ)</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367831</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0629009-76.2024.8.06.0000</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+Nº 0629009-76.2024.8.06.0000 - Agravo de Instrumento - Fortaleza - Agravante: Claudete Vanilda Souza - Agravado: Banco 
+Pan S/A - Dispositivo. Diante de tudo que acima foi exposto e por não verificar a probabilidade do direito da recorrente, conheço 
+o recurso para negar provimento. Expedientes necessários. Fortaleza, 31 de julho de 2024. FRANCISCO LUCÍDIO DE QUEIROZ 
+JÚNIOR Desembargador Relator - Advs: Thais de Mendonça Angeloni (OAB: 25695/CE) 
+DESPACHO</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367832</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0631681-57.2024.8.06.0000</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+Nº 0631681-57.2024.8.06.0000 - Agravo de Instrumento - Fortaleza - Agravante: JOAO BASTOS FREIRE FILHO - Agravado: 
+Banco BMG S/A - Do exposto, conheço do recurso e concedo a concessão do efeito suspensivo. Oficie-se ao Juízo originário, 
+comunicando-o desta decisão. Ciência ao agravante. Na forma do art. 1.019, II, do Código de Processo Civil, determino a 
+intimação da parte agravada para, no prazo de 15 (quinze) dias, oferecer suas contrarrazões, facultando-lhes juntar a 
+documentação que entender necessária. Em tempo, à SEJUD 2º Grau para a inclusão de cadastro do processo originário 
+vinculado a este Agravo de Instrumento. Cumpridas todas essas determinações e esgotados os prazos de resposta, com ou 
+sem manifestação, voltem-me os autos conclusos para julgamento (art. 1.020, NCPC). Expedientes necessários. Fortaleza, 5 de 
+agosto de 2024. DESEMBARGADOR JOSÉ EVANDRO NOGUEIRA LIMA FILHO Relator - Advs: Thais de Mendonça Angeloni 
+(OAB: 25695/CE) - Fernanda Rafaella Oliveira de Carvalho (OAB: 32766/PE) 
+DESPACHO</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367833</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0251097-10.2023.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: FERNANDA RAFAELLA OLIVEIRA DE CARVALHO (OAB 32766/PE), ADV: THAIS DE MENDONÇA ANGELONI (OAB 
+25695/CE) - Processo 0251097-10.2023.8.06.0001 - Procedimento Comum Cível - Empréstimo consignado - REQUERENTE: 
+Denis Correa - REQUERIDO: Banco Bmg S.a. e outro - Intimem-se as partes, para que, no prazo de 15 (quinze) dias, digam 
+se desejam produzir provas, e, em caso positivo, para que de logo as especifiquem de forma clara e objetiva, inclusive 
+com os esclarecimentos necessários ao convencimento da necessidade de produzi-las, mediante a explicitação dos fatos e 
+circunstâncias cuja existência deseja comprovar com a produção delas e o grau de pertinência que entende existir entre tal 
+comprovação e o deslinde do mérito da demanda em questão. Expedientes Necessários.</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367834</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0233552-87.2024.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE) - Processo 0233552-87.2024.8.06.0001 - Procedimento Comum 
+Cível - Cartão de Crédito - REQUERENTE: Francisca Souza Paz Cavalcante - Acerca da contestação às fls. 99/137, intime-se a 
+parte autora para que, querendo, apresente a réplica no prazo de 15 (quinze) dias. Expedientes necessários.</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367835</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0237988-89.2024.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE) - Processo 0237988-89.2024.8.06.0001 - Procedimento Comum 
+Cível - Empréstimo consignado - REQUERENTE: Regina Biscione Rodrigues, - Acerca da contestação às fls. 84/108, intime-se 
+a parte autora para que, querendo, apresente a réplica no prazo de 15 (quinze) dias. Expedientes necessários.</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367836</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0245644-97.2024.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE) - Processo 0245644-97.2024.8.06.0001 - Procedimento Comum 
+Cível - Cartão de Crédito - REQUERENTE: Francisco Helder Paiva Barreto - Acerca da contestação às fls. 1033/1066, intime-se 
+a parte autora para que, querendo, apresente a réplica no prazo de 15 (quinze) dias. Expedientes necessários.</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367837</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0209885-72.2024.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: SÉRGIO GONINI BENÍCIO (OAB 40470A/CE), ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE) - Processo 
+0209885-72.2024.8.06.0001 - Procedimento Comum Cível - Empréstimo consignado - REQUERENTE: Aldenir Vilanova Morais 
+Saraiva - REQUERIDO: BANCO BMG S/A - Vistos, etc. Digam as partes, em 15 (quinze) dias, se desejam produzir outras 
+provas, especificando-as e justificando sua necessidade, ficando, desde já, advertidas que, eventual silêncio será entendido 
+como desinteresse na dilação probatória. Empós, voltem para saneamento/deliberação sobre as provas a serem produzidas ou 
+julgamento do feito no estado em que se encontra. Expedientes Necessários.</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367838</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0242265-51.2024.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE), ADV: LARISSA SENTO SÉ ROSSI (OAB 16330/BA), ADV: 
+LARISSA SENTO SÉ ROSSI (OAB 16330/BA) - Processo 0242265-51.2024.8.06.0001 - Procedimento Comum Cível - Contratos 
+Bancários - REQUERENTE: Vivian Sousa de Vasconcelos - REQUERIDO: Bradesco Financiamentos - Conforme disposição 
+expressa nos arts. 129 a 133 do Provimento nº 02/2021, publicado às fls. 24/99 do DJ-e que circulou em 28/01/2021, emanado 
+da Corregedoria Geral da Justiça do Estado do Ceará, para que possa imprimir andamento ao processo: Intime-se a parte 
+autora para apresentar Réplica à Contestação no prazo legal de 15 dias, conforme arts. 350 e 437 do Código de Processo Civil.</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367839</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0233302-54.2024.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE), ADV: ENY ANGÉ SOLEDADE BITTENCOURT DE ARAÚJO (OAB 
+40797A/CE) - Processo 0233302-54.2024.8.06.0001 - Procedimento Comum Cível - Empréstimo consignado - REQUERENTE: 
+Lucia de Fatima Fialho Soares - REQUERIDO: Banco Itaú - Vistos, etc. Intimem-se as partes, para no prazo de 05 (cinco) dias, 
+especificarem justificadamente quais as provas que pretendem produzir, além daquelas existentes nos autos. Decorrido o prazo 
+e não sendo requerido diligências, retornem os autos conclusos para julgamento. Expediente necessário.</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367840</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0238457-38.2024.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: ENY ANGÉ SOLEDADE BITTENCOURT DE ARAÚJO (OAB 40797A/CE), ADV: THAIS DE MENDONÇAANGELONI (OAB 
+25695/CE) - Processo 0238457-38.2024.8.06.0001 - Procedimento Comum Cível - Empréstimo consignado - REQUERENTE: 
+Doraci da Costa Silveira de Oliveira - REQUERIDO: Banco Itaú e outro - Vistos, etc. Intimem-se as partes, para no prazo de 
+05 (cinco) dias, especificarem justificadamente quais as provas que pretendem produzir, além daquelas existentes nos autos. 
+Decorrido o prazo e não sendo requerido diligências, retornem os autos conclusos para julgamento. Expediente necessário.</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367841</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0253920-20.2024.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE) - Processo 0253920-20.2024.8.06.0001 - Procedimento Comum 
+Cível - Empréstimo consignado - REQUERENTE: Pedro Francisco da Silva - Vistos em Inspeção. Considerando que não foram 
+apresentados documentos atualizados pertinentes à condição econômica do requerente, INTIME-SE o autor, com fundamento no 
+art.99, 2º, do Código de Processo Civil, para comprovar a sua situação de hipossuficiência financeira, no prazo de 15 (quinze) 
+dias, por meio de suas três últimas declarações de imposto de renda ou fotocópia dos últimos três comprovantes de rendimentos 
+mensais, bem como dos demais documentos que entenda pertinentes à comprovação do alegado pelos requerentes. Publique- 
+se. Expedientes necessários. Fortaleza/CE, 24 de julho de 2024. Renata Santos Nadyer Barbosa Juíza de Direito</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367842</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0219735-53.2024.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: LIDIANI CORREIA DE ARRUDA (OAB 35980/CE), ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE), ADV: 
+DENNER DE BARROS E MASCARENHAS BARBOSA (OAB 41218A/CE) - Processo 0219735-53.2024.8.06.0001 - Procedimento 
+Comum Cível - Contratos Bancários - REQUERENTE: Ezefir Souza do Amaral - REQUERIDO: BANCO AGIBANK SA - Desse 
+modo, tendo em vista o que estabelece a Resolução nº. 07/2024, de 15 de fevereiro de 2024, do Órgão Especial do Tribunal 
+de Justiça do Estado do Ceará, diligencie o Gabinete no sentido da obtenção de nome de perito junto ao sistema SIPER, para 
+fins de realização da prova pericial que se impõe, na espécie. Intimem-se os litigantes para que, no prazo de 15 (quinze) dias, 
+indiquem assistentes técnicos e apresentem os quesitos a serem respondidos pelo louvado judicial.</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367844</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0286133-16.2023.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE) - Processo 0286133-16.2023.8.06.0001 - Procedimento 
+Comum Cível - Empréstimo consignado - REQUERENTE: Rosilene Silva - Intime-se a parte autora para se manifestar sobre a 
+contestação e documentos de fls. 83/313, no prazo de 15 (quinze) dias.</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367845</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0203166-11.2023.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE) - Processo 0203166-11.2023.8.06.0001 - Procedimento Comum 
+Cível - Contratos Bancários - REQUERENTE: Jose Airton da Silva Junior - Considerando as informações dadas às fls. 316, 
+cumpra-se o despacho de fls. 310, expedindo-se o alvará.</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367846</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0229281-35.2024.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE) - Processo 0229281-35.2024.8.06.0001 - Procedimento Comum 
+Cível - Empréstimo consignado - REQUERENTE: Francisco Carlos Vieira - Intime-se a parte autora para se manifestar sobre as 
+contestações de fls. 167/190 e 255/270 e documentos que as acompanham, no prazo de 15 (quinze) dias.</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367847</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0228938-39.2024.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE) - Processo 0228938-39.2024.8.06.0001 - Procedimento Comum 
+Cível - Empréstimo consignado - REQUERENTE: Terezinha Gomes de Souza - Sobre a contestação e documentos trazidos pelo 
+requerido, manifeste-se a parte autora, no prazo de 15 (quinze) dias (arts. 350 e 351, CPC)</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367848</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0269438-84.2023.8.06.0001</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE) - Processo 0269438-84.2023.8.06.0001 - Alimentos - Lei Especial 
+Nº 5.478/68 - Revisão - REQUERENTE: I.A.C. - Antes de prosseguir com o saneamento e organização do feito, verifica-se que a 
+parte autora não foi intimada acerca da determinação de fls. 142. Desse modo, sobre a contestação/reconvenção, manifeste-se 
+a parte autora no prazo de 15 (quinze) dias (arts. 350 e 351, CPC). Intime-se o requerente, por seu advogado. 
+EXPEDIENTES DA 5ª VARA DE FAMÍLIA 
+JUÍZO DE DIREITO DA 5ª VARA DE FAMÍLIA (SEJUD 1º GRAU) 
+INTIMAÇÃO DE PARTES E ADVOGADOS 
+RELAÇÃO Nº 0315/2024</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367849</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0200099-09.2023.8.06.0140</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE) - Processo 0200099-09.2023.8.06.0140 - Procedimento 
+Comum Cível - Cartão de Crédito - REQUERENTE: Nelci Terezinha Reif - REQUERIDO: Banco Bmg S/A - Vistos em inspeção. 
+Considerando as explanações de fl. 312/313, intime-se a parte requerente para, dentro do prazo de 5 (cinco) dias, comparecer 
+pessoalmente em secretaria, munido de documento de identidade e comprovante de residência recente, com o fim de confirmar 
+os termos da procuração supostamente firmada e da pretensão que fora apresentada em seu nome, sob pena de extinção do 
+feito sem resolução do mérito. Advirta-se a parte requerente de que deverá confirmar perante o servidor da secretaria se, de 
+fato: i) passou procuração ao causídico ii) não contratou com o banco o(s) empréstimo(s) consignado(s) ora impugnados e 
+iii) nada recebeu do banco por conta do(s) empréstimo(s) consignado(s). A parte requerente está sujeita à condenação por 
+litigância de má-fé, com aplicação de multa processual, caso demonstrado pela instituição financeira a contratação e/ou o 
+recebimento do(s) valor(es) do empréstimo. Expedientes necessários.</dsIntimacao></item><item xsi:type="tns:Register"><cdLancamento xsi:type="xsd:int">25367850</cdLancamento><dtPublicacao xsi:type="xsd:string">08/08/2024</dtPublicacao><dtDivulgacao xsi:type="xsd:string">07/08/2024</dtDivulgacao><dtAtualizacao xsi:type="xsd:string">08/08/2024 10:13:40</dtAtualizacao><nrProcesso xsi:type="xsd:string">0202812-36.2024.8.06.0167</nrProcesso><nmAdvogado xsi:type="xsd:string">THAIS DE MENDONÇA ANGELONI</nmAdvogado><nmJornal xsi:type="xsd:string">Ceara - TJ</nmJornal><nrDiario xsi:type="xsd:string">3365</nrDiario><dsIntimacao xsi:type="xsd:string">DIÁRIO DA JUSTIÇA ELETRÔNICO
+PODER JUDICIÁRIO DO ESTADO DO CEARÁ
+
+ADV: THAIS DE MENDONÇA ANGELONI (OAB 25695/CE) - Processo 0202812-36.2024.8.06.0167 - Procedimento Comum 
+Cível - Empréstimo consignado - REQUERENTE: Maria Claudia Dias - Consoante determinação contida na Portaria nº 03/2018, 
+da lavra do juízo da 1ª Vara Cível de Sobral, que trata dos atos ordinatórios, INTIME-SE A PARTE AUTORA, na pessoa de seu 
+advogado, acerca da decisão interlocutória de p. 35/36, bem como para comparecer(em) à audiência de conciliação (prevista 
+no art. 334 do CPC/15) designada para o dia 16/09/2024 às 08h30min, a ser realizada na Sala n 01 do Centro Judiciário de 
+Solução de Conflitos e Cidadania - CEJUSC, por VIDEOCONFERÊNCIA, através do MICROSOFT TEAMS, devendo utilizarem 
+o seguinte link para acesso: https://bit.ly/3AAcZyl CITE-SE A PARTE RÉ para tomar conhecimento da demanda e, querendo, 
+apresentar defesa, advertindo-lhe que o prazo contestatório, de 15 dias, contar-se-á conforme o artigo 335 do CPC/2015, tudo 
+sob pena de revelia e de presunção de veracidade dos fatos afirmados pelo autor no pedido inicial, bem como INTIME-SE 
+acerca do do deferimento do ônus da prova, devendo a parte promovida exibir prova da existência do negócio jurídico, mediante 
+a juntada do instrumento, conforme decisão de p. 35/36, e para comparecer à audiência de conciliação acima designada. Na 
+oportunidade, cientifique as partes devem estar acompanhadas de seus causídicos ou defensores públicos, podendo a parte 
+constituir representante, por meio de procuração específica, com poderes para negociar e transigir (CPC, art. 334,  10), bem 
+como advirta-se também que que o ato processual só não será realizado se ambas as partes, expressamente, manifestarem 
+desinteresse na composição consensual, e que o não comparecimento injustificado do autor ou do réu à audiência é considerado 
+por lei ato atentatório à dignidade da justiça e será sancionado com multa de até dois por cento da vantagem econômica 
+pretendida ou do valor da causa, revertida em favor do Estado.</dsIntimacao></item></Registers></ns1:getRecordsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>

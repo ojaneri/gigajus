@@ -1,0 +1,1 @@
+ALTER TABLE usuarios ADD COLUMN ativo tinyint(1) DEFAULT '1';

@@ -1,0 +1,649 @@
+<?php
+function sendNotification($type, $destinatario, $mensagem, $assunto = null) {
+    global $conn;
+    $api_url = 'https://janeri.com.br/api/envio/';
+    
+    // Validar campos obrigatórios
+    $camposObrigatorios = [
+        'whatsapp' => ['destinatario' => $destinatario, 'mensagem' => $mensagem],
+        'sms' => ['destinatario' => $destinatario, 'mensagem' => $mensagem],
+        'email' => ['destinatario' => $destinatario, 'mensagem' => $mensagem, 'assunto' => $assunto]
+    ];
+    
+    if (!isset($camposObrigatorios[$type]) || in_array(null, $camposObrigatorios[$type], true)) {
+        logMessage("Erro: Campos obrigatórios faltantes para $type");
+        return false;
+    }
+
+    $data = [
+        $type => $destinatario,
+        'mensagem' => $mensagem,
+        'assunto' => $assunto,
+        'token' => generateJWT($destinatario)
+    ];
+
+    $ch = curl_init($api_url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => json_encode($data),
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . API_NOTIFICATIONS_KEY
+        ],
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_SSL_VERIFYHOST => 2,
+        CURLOPT_CAINFO => '/etc/ssl/certs/ca-certificates.crt',
+        CURLOPT_TIMEOUT => 15
+    ]);
+    
+    $response = curl_exec($ch);
+    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    
+    if (curl_errno($ch)) {
+        logMessage("Erro de conexão: " . curl_error($ch));
+        curl_close($ch);
+        return false;
+    }
+    
+    curl_close($ch);
+    $result = json_decode($response, true);
+    
+    if ($httpcode === 200 && isset($result['status']) && $result['status'] === 'success') {
+        logMessage("Notificação $type enviada com sucesso");
+        return true;
+    } else {
+        $errorMsg = "Erro ao enviar notificação $type | HTTP $httpcode";
+        if (isset($result['message'])) {
+            $errorMsg .= " | API Error: " . $result['message'];
+        }
+        logMessage($errorMsg);
+        return false;
+    }
+}
+
+function generateTaskUrl($task_id) {
+    $token = generateJWT($task_id);
+    return "https://janeri.com.br/gigajus/v2/view_task.php?id=$task_id&token=$token";
+}
+
+function generateJWT($subject) {
+    $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
+    $payload = json_encode([
+        'sub' => $subject,
+        'iat' => time(),
+        'exp' => time() + 3600 // 1 hora de validade
+    ]);
+    
+    $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
+    $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));
+    $signature = hash_hmac('sha256', "$base64UrlHeader.$base64UrlPayload", JWT_SECRET, true);
+    $base64UrlSignature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
+    
+    return "$base64UrlHeader.$base64UrlPayload.$base64UrlSignature";
+}
+
+function validateToken($token, $subject) {
+    $parts = explode('.', $token);
+    if (count($parts) !== 3) return false;
+    
+    $signature = base64_decode(str_replace(['-', '_'], ['+', '/'], $parts[2]));
+    $expectedSignature = hash_hmac('sha256', "$parts[0].$parts[1]", JWT_SECRET, true);
+    
+    if (!hash_equals($expectedSignature, $signature)) return false;
+    
+    $payload = json_decode(base64_decode(str_replace(['-', '_'], ['+', '/'], $parts[1])), true);
+    
+    return $payload['sub'] == $subject && $payload['exp'] > time();
+}
+// Funções existentes de notificação de tarefas...
+
+/**
+ * Obtém as notificações do usuário
+ *
+ * @param mysqli $conn Conexão com o banco de dados
+ * @param int $user_id ID do usuário
+ * @param array $filters Filtros para a consulta (opcional)
+ * @return array Array com as notificações do usuário
+ */
+function get_user_notifications($conn, $user_id, $filters = []) {
+    // Verifica se a conexão é válida
+    if (!$conn) {
+        error_log("Erro: Conexão com o banco de dados inválida");
+        return [];
+    }
+    
+    // Consulta base para obter todas as notificações
+    $query = "SELECT n.* FROM notifications n WHERE 1=1";
+    $params = [];
+    $types = "";
+    
+    // Aplica filtros se fornecidos
+    if (!empty($filters['classe'])) {
+        $query .= " AND n.classe LIKE ?";
+        $param_classe = "%" . $filters['classe'] . "%";
+        $params[] = $param_classe;
+        $types .= "s";
+    }
+    
+    if (!empty($filters['termo'])) {
+        $query .= " AND (n.numero_processo LIKE ? OR n.advogados LIKE ?)";
+        $param_termo = "%" . $filters['termo'] . "%";
+        $params[] = $param_termo;
+        $params[] = $param_termo;
+        $types .= "ss";
+    }
+    
+    if (!empty($filters['tribunal'])) {
+        $query .= " AND n.tribunal = ?";
+        $params[] = $filters['tribunal'];
+        $types .= "s";
+    }
+    
+    // Consulta para obter o id_empresa do usuário
+    $empresa_query = "SELECT id_empresa FROM usuario_empresa WHERE id_usuario = ?";
+    $empresa_stmt = $conn->prepare($empresa_query);
+    $empresa_stmt->bind_param("i", $user_id);
+    $empresa_stmt->execute();
+    $empresa_result = $empresa_stmt->get_result();
+
+    if ($empresa_result->num_rows == 0) {
+        error_log("Usuário não vinculado a nenhuma empresa.");
+        return []; // Usuário não vinculado a nenhuma empresa, retorna sem notificações
+    }
+
+    $empresa_row = $empresa_result->fetch_assoc();
+    $id_empresa = $empresa_row['id_empresa'];
+
+    $empresa_stmt->close();
+
+    // Consulta para obter os advogados da empresa
+    $advogados_query = "SELECT nome_advogado FROM advogados WHERE id_empresa = ?";
+    $advogados_stmt = $conn->prepare($advogados_query);
+    $advogados_stmt->bind_param("i", $id_empresa);
+    $advogados_stmt->execute();
+    $advogados_result = $advogados_stmt->get_result();
+
+    $advogados = [];
+    while ($advogado_row = $advogados_result->fetch_assoc()) {
+        $advogados[] = $advogado_row['nome_advogado'];
+    }
+
+    $advogados_stmt->close();
+
+    // Se não houver advogados associados à empresa, retorna sem notificações
+    if (empty($advogados)) {
+        error_log("Nenhum advogado associado à empresa.");
+        return [];
+    }
+
+    // Adiciona filtro para advogados da empresa
+    $query .= " AND (";
+    $advogado_placeholders = implode(" LIKE ? OR ", array_fill(0, count($advogados), "n.advogados"));
+    $query .= $advogado_placeholders . " LIKE ?)";
+
+    foreach ($advogados as $advogado) {
+        $param_advogado = "%" . $advogado . "%";
+        $params[] = $param_advogado;
+        $types .= "s";
+    }
+    
+    $query .= " ORDER BY n.created_at DESC";
+    
+    $stmt = $conn->prepare($query);
+    
+    if (!empty($types) && !empty($params)) {
+        $stmt->bind_param($types, ...$params);
+    }
+    
+    if (!$stmt->execute()) {
+        error_log("Erro na execução da consulta: " . $stmt->error);
+        $stmt->close();
+        return [];
+    }
+    
+    $result = $stmt->get_result();
+    $notifications = [];
+    
+    while ($row = $result->fetch_assoc()) {
+        // Formata a data para exibição
+        $row['date'] = date('d/m/Y H:i', strtotime($row['created_at']));
+        // Adiciona a mensagem formatada
+        $row['message'] = "Processo {$row['numero_processo']} ({$row['classe']}) - {$row['tribunal']}";
+        if (!empty($row['data_publicacao'])) {
+            $row['message'] .= " - Publicado em " . date('d/m/Y', strtotime($row['data_publicacao']));
+        }
+        
+        $notifications[] = $row;
+    }
+    
+    $stmt->close();
+    return $notifications;
+}
+
+/**
+ * Busca intimações da API externa
+ *
+ * @param array $filters Filtros para a busca
+ * @return array|false Array com as intimações ou false em caso de erro
+ */
+function fetchNotificationsFromAPI($filters) {
+    // URL da API externa
+    $api_url = 'https://comunicaapi.pje.jus.br/api/v1/comunicacao';
+    
+    // Prepara os parâmetros da requisição - mapeando para os parâmetros corretos da API
+    $params = [];
+    
+    // Adiciona o parâmetro meio (D = Diário)
+    $params['meio'] = 'D';
+    
+    // Adiciona parâmetros de paginação
+    $params['pagina'] = 1;
+    $params['tamanhoPagina'] = 100;
+    
+    // Mapeia os filtros para os novos parâmetros da API
+    if (!empty($filters['oab_numero'])) {
+        $params['numeroOab'] = $filters['oab_numero'];
+    }
+    
+    if (!empty($filters['oab_uf'])) {
+        $params['ufOab'] = $filters['oab_uf'];
+    }
+    
+    if (!empty($filters['tribunal'])) {
+        $params['siglaTribunal'] = $filters['tribunal'];
+    }
+    
+    if (!empty($filters['classe'])) {
+        $params['classe'] = $filters['classe'];
+    }
+    
+    if (!empty($filters['termo'])) {
+        $params['texto'] = $filters['termo'];
+    }
+    
+    // Adiciona filtros de data se existirem (usando os novos nomes de parâmetros)
+    if (!empty($filters['data_inicio'])) {
+        $params['dataDisponibilizacaoInicio'] = $filters['data_inicio'];
+    } else {
+        // Se não foi especificado, usa 30 dias atrás como padrão
+        $params['dataDisponibilizacaoInicio'] = date('Y-m-d', strtotime('-30 days'));
+    }
+    
+    if (!empty($filters['data_fim'])) {
+        $params['dataDisponibilizacaoFim'] = $filters['data_fim'];
+    } else {
+        // Se não foi especificado, usa a data atual como padrão
+        $params['dataDisponibilizacaoFim'] = date('Y-m-d');
+    }
+    // Inicializa cURL
+    $ch = curl_init();
+    
+    // URL da requisição
+    $request_url = $api_url . '?' . http_build_query($params);
+    
+    // Log da URL para debug
+    file_put_contents('api.log', date('[Y-m-d H:i:s] ') . "URL da requisição: " . $request_url . PHP_EOL, FILE_APPEND);
+    
+    // Configura a requisição cURL com proxy SOCKS5
+    curl_setopt_array($ch, [
+        CURLOPT_URL => $request_url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 60, // Aumentado para 60 segundos
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'Accept: application/json'
+        ],
+        // Configuração do proxy SOCKS5
+        CURLOPT_PROXY => PROXY_SOCKS_HOST,
+        CURLOPT_PROXYPORT => PROXY_SOCKS_PORT,
+        CURLOPT_PROXYTYPE => CURLPROXY_SOCKS5,
+        CURLOPT_PROXYUSERPWD => PROXY_SOCKS_AUTH,
+        CURLOPT_VERBOSE => true,
+        CURLOPT_STDERR => $verbose = fopen('php://temp', 'w+'),
+        CURLOPT_SSL_VERIFYPEER => false, // Desabilita verificação SSL para testes
+        CURLOPT_SSL_VERIFYHOST => 0      // Desabilita verificação de host para testes
+    ]);
+    
+    // Executa a requisição
+    // Executa a requisição
+    $start_time = microtime(true);
+    $response = curl_exec($ch);
+    $end_time = microtime(true);
+    $execution_time = $end_time - $start_time;
+    
+    // Obtém informações detalhadas
+    $error = curl_error($ch);
+    $errno = curl_errno($ch);
+    $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $info = curl_getinfo($ch);
+    
+    // Obtém logs verbosos
+    rewind($verbose);
+    $verbose_log = stream_get_contents($verbose);
+    
+    // Log de tempo de execução
+    file_put_contents('api.log', date('[Y-m-d H:i:s] ') . "Tempo de execução da requisição: " . round($execution_time, 2) . " segundos" . PHP_EOL, FILE_APPEND);
+    
+    // Log de informações detalhadas
+    file_put_contents('api.log', date('[Y-m-d H:i:s] ') . "Informações da requisição: " . json_encode($info, JSON_PRETTY_PRINT) . PHP_EOL, FILE_APPEND);
+    
+    // Log de saída verbosa
+    file_put_contents('api.log', date('[Y-m-d H:i:s] ') . "Log verboso: " . $verbose_log . PHP_EOL, FILE_APPEND);
+    
+    curl_close($ch);
+    
+    // Verifica se houve erro na requisição
+    if ($error) {
+        $error_msg = "Erro ao consultar API de intimações: " . $error . " (Código: " . $errno . ")";
+        error_log($error_msg);
+        file_put_contents('api.log', date('[Y-m-d H:i:s] ') . $error_msg . PHP_EOL, FILE_APPEND);
+        
+        // Salva a resposta completa para análise
+        file_put_contents('api_error_response.log', $response);
+        
+        return [
+            'error' => $error_msg,
+            'errno' => $errno,
+            'execution_time' => $execution_time
+        ];
+    }
+    
+    // Verifica se o status code é válido
+    if ($status_code != 200) {
+        $error_msg = "API retornou status code inválido: " . $status_code . " - Resposta: " . substr($response, 0, 500);
+        error_log($error_msg);
+        file_put_contents('api.log', date('[Y-m-d H:i:s] ') . $error_msg . PHP_EOL, FILE_APPEND);
+        
+        // Salva a resposta completa para análise
+        file_put_contents('api_error_response.log', $response);
+        
+        return [
+            'error' => $error_msg,
+            'response' => $response,
+            'status_code' => $status_code,
+            'execution_time' => $execution_time
+        ];
+    }
+    // Decodifica a resposta JSON
+    $data = json_decode($response, true);
+    
+    // Verifica se a decodificação foi bem-sucedida
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        $error_msg = "Erro ao decodificar resposta JSON: " . json_last_error_msg() . " - Resposta: " . $response;
+        error_log($error_msg);
+        file_put_contents('api.log', date('[Y-m-d H:i:s] ') . $error_msg . PHP_EOL, FILE_APPEND);
+        return ['error' => $error_msg, 'response' => $response];
+    }
+    
+    // Log the structure of the data for debugging
+    $data_type = gettype($data);
+    $data_sample = is_array($data) && !empty($data) ? print_r(array_slice($data, 0, 1), true) : $data;
+    $debug_msg = "API response type: $data_type, Sample: $data_sample";
+    error_log($debug_msg);
+    file_put_contents('api.log', date('[Y-m-d H:i:s] ') . $debug_msg . PHP_EOL, FILE_APPEND);
+    
+    // Ensure data is properly formatted as an array of objects
+    if (!is_array($data)) {
+        $error_msg = "API response is not an array: " . $response;
+        error_log($error_msg);
+        file_put_contents('api.log', date('[Y-m-d H:i:s] ') . $error_msg . PHP_EOL, FILE_APPEND);
+        return ['error' => $error_msg, 'response' => $response];
+    }
+    
+    // Process the API response which may have a complex structure
+    $formatted_data = [];
+    
+    // Check if the response has a status field indicating success
+    if (isset($data['status']) && $data['status'] === 'success') {
+        // Check if there are items in the response
+        if (isset($data['items']) && is_array($data['items']) && !empty($data['items'])) {
+            file_put_contents('api.log', date('[Y-m-d H:i:s] ') . "API retornou status de sucesso com " . count($data['items']) . " itens." . PHP_EOL, FILE_APPEND);
+            // Continue processing with the items array
+            $items = $data['items'];
+        } else {
+            // No items found
+            file_put_contents('api.log', date('[Y-m-d H:i:s] ') . "API retornou status de sucesso, mas sem dados." . PHP_EOL, FILE_APPEND);
+            return [];
+        }
+    }
+    
+    // Process each item in the response
+    // Check if the data is an array of objects or a single object with a 'content' property (pagination format)
+    if (!isset($items)) {
+        if (isset($data['content']) && is_array($data['content'])) {
+            // This is the new API format with pagination
+            $items = $data['content'];
+            file_put_contents('api.log', date('[Y-m-d H:i:s] ') . "API retornou formato paginado com " . count($items) . " itens." . PHP_EOL, FILE_APPEND);
+        } else {
+            // Assume it's the old format or a direct array of items
+            $items = $data;
+        }
+    }
+    
+    foreach ($items as $item) {
+        // Check if this is a nested array with actual notification data
+        if (is_array($item) && isset($item[0]) && is_array($item[0]) && isset($item[0]['numero_processo'])) {
+            // This is a nested array with the actual notification data
+            foreach ($item as $notification) {
+                if (isset($notification['numero_processo'])) {
+                    // Extract the advogados information from destinatarioadvogados if available
+                    $advogados = '';
+                    if (isset($notification['destinatarioadvogados']) && is_array($notification['destinatarioadvogados'])) {
+                        foreach ($notification['destinatarioadvogados'] as $adv) {
+                            if (isset($adv['advogado']) && is_array($adv['advogado'])) {
+                                $advogado = $adv['advogado'];
+                                $advogados .= $advogado['nome'] . ' (OAB ' . $advogado['numero_oab'] . '/' . $advogado['uf_oab'] . '), ';
+                            }
+                        }
+                        $advogados = rtrim($advogados, ', ');
+                    }
+                    
+                    // Handle different field names in the API response
+                    $classe = isset($notification['nomeClasse']) ? $notification['nomeClasse'] :
+                             (isset($notification['classe']) ? $notification['classe'] : 'Desconhecida');
+                    
+                    $tribunal = isset($notification['siglaTribunal']) ? $notification['siglaTribunal'] :
+                               (isset($notification['tribunal']) ? $notification['tribunal'] : 'Desconhecido');
+                    
+                    $data_publicacao = isset($notification['data_disponibilizacao']) ? $notification['data_disponibilizacao'] :
+                                      (isset($notification['dataDisponibilizacao']) ? $notification['dataDisponibilizacao'] : date('Y-m-d'));
+                    
+                    // Extrair o teor da intimação se disponível
+                    $teor = isset($notification['teor']) ? $notification['teor'] :
+                           (isset($notification['conteudo']) ? $notification['conteudo'] :
+                           (isset($notification['texto']) ? $notification['texto'] : ''));
+                    
+                    $formatted_data[] = [
+                        'numero_processo' => $notification['numero_processo'],
+                        'classe' => $classe,
+                        'tribunal' => $tribunal,
+                        'advogados' => $advogados,
+                        'data_publicacao' => $data_publicacao,
+                        'teor' => $teor,
+                        'texto' => isset($notification['texto']) ? $notification['texto'] : '',
+                        'in_database' => true
+                    ];
+                }
+            }
+        } elseif (is_array($item) && isset($item['numero_processo'])) {
+            // This is a direct notification object
+            // Handle different field names in the API response
+            $classe = isset($item['nomeClasse']) ? $item['nomeClasse'] :
+                     (isset($item['classe']) ? $item['classe'] : 'Desconhecida');
+            
+            $tribunal = isset($item['siglaTribunal']) ? $item['siglaTribunal'] :
+                       (isset($item['tribunal']) ? $item['tribunal'] : 'Desconhecido');
+            
+            $data_publicacao = isset($item['data_disponibilizacao']) ? $item['data_disponibilizacao'] :
+                              (isset($item['dataDisponibilizacao']) ? $item['dataDisponibilizacao'] : date('Y-m-d'));
+            
+            $advogados = '';
+            if (isset($item['destinatarioadvogados']) && is_array($item['destinatarioadvogados'])) {
+                foreach ($item['destinatarioadvogados'] as $adv) {
+                    if (isset($adv['advogado']) && is_array($adv['advogado'])) {
+                        $advogado = $adv['advogado'];
+                        $advogados .= $advogado['nome'] . ' (OAB ' . $advogado['numero_oab'] . '/' . $advogado['uf_oab'] . '), ';
+                    }
+                }
+                $advogados = rtrim($advogados, ', ');
+            }
+            
+            // Extrair o teor da intimação se disponível
+            $teor = isset($item['teor']) ? $item['teor'] :
+                   (isset($item['conteudo']) ? $item['conteudo'] :
+                   (isset($item['texto']) ? $item['texto'] : ''));
+            
+            $formatted_data[] = [
+                'numero_processo' => $item['numero_processo'],
+                'classe' => $classe,
+                'tribunal' => $tribunal,
+                'advogados' => $advogados,
+                'data_publicacao' => $data_publicacao,
+                'teor' => $teor,
+                'texto' => isset($item['texto']) ? $item['texto'] : '',
+                'in_database' => true
+            ];
+        } elseif (is_string($item)) {
+            // Try to decode the string as JSON
+            $decoded = json_decode($item, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $formatted_data[] = $decoded;
+            } else {
+                // If it's not valid JSON, create a simple object with the string
+                $formatted_data[] = [
+                    'numero_processo' => $item,
+                    'classe' => 'Desconhecida',
+                    'tribunal' => $filters['tribunal'] ?? 'Desconhecido',
+                    'advogados' => $filters['oab_numero'] . '/' . $filters['oab_uf'],
+                    'data_publicacao' => date('Y-m-d'),
+                    'teor' => '',
+                    'texto' => '',
+                    'in_database' => true
+                ];
+            }
+        }
+    }
+    
+    // Log de sucesso
+    $success_msg = "API consultada com sucesso. Retornados " . count($formatted_data) . " resultados formatados.";
+    file_put_contents('api.log', date('[Y-m-d H:i:s] ') . $success_msg . PHP_EOL, FILE_APPEND);
+    
+    return $formatted_data;
+}
+
+/**
+ * Salva intimações no banco de dados
+ *
+ * @param mysqli $conn Conexão com o banco de dados
+ * @param array $notifications Array com as intimações
+ * @return int Número de intimações salvas
+ */
+function saveNotificationsToDatabase($conn, $notifications) {
+    $count = 0;
+    
+    // Log the structure of the notifications for debugging
+    error_log("Notifications structure: " . print_r($notifications, true));
+    
+    // If notifications is not an array, return 0
+    if (!is_array($notifications)) {
+        error_log("Error: notifications is not an array");
+        return 0;
+    }
+    
+    foreach ($notifications as $notification) {
+        // Check if notification is an array with the expected keys
+        if (!is_array($notification) || !isset($notification['numero_processo'])) {
+            error_log("Error: notification is not properly formatted: " . print_r($notification, true));
+            continue; // Skip this notification
+        }
+        
+        // Verifica se o processo já existe
+        $check_process = $conn->prepare("SELECT id FROM processes WHERE numero_processo = ?");
+        $check_process->bind_param("s", $notification['numero_processo']);
+        $check_process->execute();
+        $process_result = $check_process->get_result();
+        
+        // Se o processo não existe, cria um novo
+        if ($process_result->num_rows == 0) {
+            $insert_process = $conn->prepare("INSERT INTO processes (numero_processo, classe, tribunal) VALUES (?, ?, ?)");
+            $insert_process->bind_param("sss", 
+                $notification['numero_processo'], 
+                $notification['classe'], 
+                $notification['tribunal']
+            );
+            $insert_process->execute();
+            $processo_id = $conn->insert_id;
+            $insert_process->close();
+        } else {
+            $process_row = $process_result->fetch_assoc();
+            $processo_id = $process_row['id'];
+        }
+        $check_process->close();
+        
+        // Verifica se a notificação já existe
+        // Check if data_publicacao exists in the notification
+        if (!isset($notification['data_publicacao'])) {
+            error_log("Warning: notification missing data_publicacao, using current date: " . print_r($notification, true));
+            $notification['data_publicacao'] = date('Y-m-d'); // Use current date as fallback
+        }
+        
+        $check_notification = $conn->prepare("SELECT id FROM notifications WHERE numero_processo = ? AND data_publicacao = ?");
+        $check_notification->bind_param("ss",
+            $notification['numero_processo'],
+            $notification['data_publicacao']
+        );
+        $check_notification->execute();
+        $notification_result = $check_notification->get_result();
+        
+        // Se a notificação não existe, cria uma nova
+        if ($notification_result->num_rows == 0) {
+            // Check if all required fields exist
+            if (!isset($notification['classe']) || !isset($notification['advogados']) ||
+                !isset($notification['tribunal']) || !isset($notification['data_publicacao'])) {
+                error_log("Error: notification missing required fields: " . print_r($notification, true));
+                continue; // Skip this notification
+            }
+            
+            // Verifica se existe o campo teor ou texto
+            $teor = isset($notification['teor']) ? $notification['teor'] :
+                   (isset($notification['texto']) ? $notification['texto'] : '');
+            
+            // Verifica se a tabela notifications tem a coluna teor
+            $check_column = $conn->query("SHOW COLUMNS FROM notifications LIKE 'teor'");
+            
+            if ($check_column->num_rows > 0) {
+                // Se a coluna teor existe, inclui no INSERT
+                $insert_notification = $conn->prepare("INSERT INTO notifications (processo_id, numero_processo, classe, advogados, tribunal, data_publicacao, teor) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                $insert_notification->bind_param("issssss",
+                    $processo_id,
+                    $notification['numero_processo'],
+                    $notification['classe'],
+                    $notification['advogados'],
+                    $notification['tribunal'],
+                    $notification['data_publicacao'],
+                    $teor
+                );
+            } else {
+                // Se a coluna não existe, usa o INSERT original
+                $insert_notification = $conn->prepare("INSERT INTO notifications (processo_id, numero_processo, classe, advogados, tribunal, data_publicacao) VALUES (?, ?, ?, ?, ?, ?)");
+                $insert_notification->bind_param("isssss",
+                    $processo_id,
+                    $notification['numero_processo'],
+                    $notification['classe'],
+                    $notification['advogados'],
+                    $notification['tribunal'],
+                    $notification['data_publicacao']
+                );
+            }
+            
+            if ($insert_notification->execute()) {
+                $count++;
+            }
+            $insert_notification->close();
+        }
+        $check_notification->close();
+    }
+    
+    return $count;
+}

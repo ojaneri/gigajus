@@ -1,0 +1,736 @@
+<?php
+session_start();
+require 'config.php';
+require 'includes/notifications_helper.php';
+
+// Verifica se o usuário está logado
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+$is_admin = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
+
+// Inicializa variáveis de filtro
+$where_clause = "";
+$filters = [
+    'classe' => isset($_GET['classe']) ? trim($_GET['classe']) : '',
+    'termo' => isset($_GET['termo']) ? trim($_GET['termo']) : '',
+    'tribunal' => isset($_GET['tribunal']) ? trim($_GET['tribunal']) : '',
+    'data_inicio' => isset($_GET['data_inicio']) ? trim($_GET['data_inicio']) : '',
+    'data_fim' => isset($_GET['data_fim']) ? trim($_GET['data_fim']) : '',
+    'status' => isset($_GET['status']) ? trim($_GET['status']) : 'all',
+    'advogado' => isset($_GET['advogado']) ? trim($_GET['advogado']) : ''
+];
+
+// Lista de UFs para o filtro
+$ufs = [
+    'AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 
+    'MG', 'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 
+    'RO', 'RR', 'RS', 'SC', 'SE', 'SP', 'TO'
+];
+
+// Lista de tribunais para o filtro
+$tribunais = [
+    'STF', 'STJ', 'TST', 'TSE', 'STM', 'TRF1', 'TRF2', 'TRF3', 'TRF4', 'TRF5',
+    'TJAC', 'TJAL', 'TJAM', 'TJAP', 'TJBA', 'TJCE', 'TJDF', 'TJES', 'TJGO', 'TJMA',
+    'TJMG', 'TJMS', 'TJMT', 'TJPA', 'TJPB', 'TJPE', 'TJPI', 'TJPR', 'TJRJ', 'TJRN',
+    'TJRO', 'TJRR', 'TJRS', 'TJSC', 'TJSE', 'TJSP', 'TJTO'
+];
+
+// Verifica se o botão de busca foi clicado
+$fetch_from_api = isset($_GET['fetch_api']) && $_GET['fetch_api'] == 1;
+
+// As funções fetchNotificationsFromAPI e saveNotificationsToDatabase estão definidas em includes/notifications_helper.php
+
+// Busca intimações da API e salva no banco se solicitado
+$api_message = '';
+$api_debug = null;
+
+if ($fetch_from_api) {
+    // Registra a tentativa de busca na API
+    file_put_contents('api.log', date('[Y-m-d H:i:s] ') . "Iniciando busca na API com filtros: " . json_encode($filters) . PHP_EOL, FILE_APPEND);
+    
+    // Executa a busca na API
+    $api_notifications = fetchNotificationsFromAPI($filters);
+    
+    // Verifica se houve erro
+    if (is_array($api_notifications) && isset($api_notifications['error'])) {
+        $api_message = "Erro ao buscar intimações da API externa.";
+        $api_debug = $api_notifications;
+        
+        // Tenta usar wget para verificar a URL
+        // Mapeia os parâmetros para o formato correto da API
+        $api_params = [];
+        // Adiciona o parâmetro meio (D = Diário)
+        $api_params['meio'] = 'D';
+        
+        // Adiciona parâmetros de paginação
+        $api_params['pagina'] = 1;
+        $api_params['tamanhoPagina'] = 100;
+        
+        if (!empty($filters['oab_numero'])) $api_params['numeroOab'] = $filters['oab_numero'];
+        if (!empty($filters['oab_uf'])) $api_params['ufOab'] = $filters['oab_uf'];
+        if (!empty($filters['tribunal'])) $api_params['siglaTribunal'] = $filters['tribunal'];
+        if (!empty($filters['classe'])) $api_params['classe'] = $filters['classe'];
+        if (!empty($filters['termo'])) $api_params['texto'] = $filters['termo'];
+        
+        // Adiciona filtros de data com os novos nomes de parâmetros
+        if (!empty($filters['data_inicio'])) {
+            $api_params['dataDisponibilizacaoInicio'] = $filters['data_inicio'];
+        } else {
+            $api_params['dataDisponibilizacaoInicio'] = date('Y-m-d', strtotime('-30 days'));
+        }
+        
+        if (!empty($filters['data_fim'])) {
+            $api_params['dataDisponibilizacaoFim'] = $filters['data_fim'];
+        } else {
+            $api_params['dataDisponibilizacaoFim'] = date('Y-m-d');
+        }
+        
+        $url_params = http_build_query($api_params);
+        $wget_url = "https://comunicaapi.pje.jus.br/api/v1/comunicacao?" . $url_params;
+        $wget_command = "wget -O - -q --proxy-user=checaativos --proxy-password=Proxy2025 -e use_proxy=yes -e http_proxy=185.72.240.72:7108 '$wget_url' 2>> api.log";
+        $wget_result = shell_exec($wget_command);
+        
+        file_put_contents('api.log', date('[Y-m-d H:i:s] ') . "Tentativa com wget: $wget_url" . PHP_EOL, FILE_APPEND);
+        file_put_contents('api.log', date('[Y-m-d H:i:s] ') . "Resultado wget: " . ($wget_result ?: "Sem resposta") . PHP_EOL, FILE_APPEND);
+        
+        if ($wget_result) {
+            $api_debug['wget_result'] = $wget_result;
+        }
+    } else {
+        // Log the API response for debugging
+        file_put_contents('api.log', date('[Y-m-d H:i:s] ') . "API Response: " . print_r($api_notifications, true) . PHP_EOL, FILE_APPEND);
+        
+        // Ensure $api_notifications is an array
+        if (!is_array($api_notifications)) {
+            $api_message = "Erro: A API retornou um formato inválido.";
+            $api_debug = ['error' => 'Invalid response format', 'response' => $api_notifications];
+        } else {
+            $saved_count = saveNotificationsToDatabase($conn, $api_notifications);
+            $api_message = "Foram encontradas e salvas $saved_count novas intimações.";
+        }
+        
+        if ($is_admin) {
+            $api_debug = [
+                'success' => true,
+                'count' => count($api_notifications),
+                'saved' => $saved_count,
+                'sample' => array_slice($api_notifications, 0, 2) // Mostra apenas 2 exemplos para não sobrecarregar
+            ];
+        }
+    }
+}
+
+// Obtém as notificações do banco de dados com base nos filtros
+// Verifica se as colunas polo_ativo e polo_passivo existem na tabela processes
+$check_columns = $conn->query("SHOW COLUMNS FROM processes WHERE Field IN ('polo_ativo', 'polo_passivo', 'parte_ativa', 'parte_passiva')");
+$columns = [];
+while ($column = $check_columns->fetch_assoc()) {
+    $columns[] = $column['Field'];
+}
+
+// Constrói a query com base nas colunas existentes
+if (in_array('polo_ativo', $columns) && in_array('polo_passivo', $columns)) {
+    // Novas colunas existem
+    $query = "SELECT n.*, p.polo_ativo, p.polo_passivo FROM notifications n
+              LEFT JOIN processes p ON n.processo_id = p.id
+              WHERE 1=1";
+} elseif (in_array('parte_ativa', $columns) && in_array('parte_passiva', $columns)) {
+    // Colunas antigas existem
+    $query = "SELECT n.*, p.parte_ativa AS polo_ativo, p.parte_passiva AS polo_passivo FROM notifications n
+              LEFT JOIN processes p ON n.processo_id = p.id
+              WHERE p.company_id = ?";
+} else {
+    // As colunas não existem, usa uma query simples
+    $query = "SELECT n.* FROM notifications n WHERE 1=1";
+}
+$params = [];
+$types = "";
+
+if (isset($_SESSION['company_id'])) {
+    $user_company_id = $_SESSION['company_id'];
+    $query .= " AND p.company_id = ?";
+    $params[] = $user_company_id;
+    $types .= "i";
+}
+
+if (!empty($filters['classe'])) {
+    $query .= " AND n.classe LIKE ?";
+    $param_classe = "%" . $filters['classe'] . "%";
+    $params[] = $param_classe;
+    $types .= "s";
+}
+
+if (!empty($filters['termo'])) {
+    $query .= " AND (n.numero_processo LIKE ? OR n.advogados LIKE ?)";
+    $param_termo = "%" . $filters['termo'] . "%";
+    $params[] = $param_termo;
+    $params[] = $param_termo;
+    $types .= "ss";
+}
+
+if (!empty($filters['tribunal'])) {
+    $query .= " AND n.tribunal = ?";
+    $params[] = $filters['tribunal'];
+    $types .= "s";
+}
+
+// Adiciona filtros de data se existirem
+if (!empty($filters['data_inicio'])) {
+    $query .= " AND n.data_publicacao >= ?";
+    $params[] = $filters['data_inicio'];
+    $types .= "s";
+}
+
+if (!empty($filters['data_fim'])) {
+    $query .= " AND n.data_publicacao <= ?";
+    $params[] = $filters['data_fim'];
+    $types .= "s";
+}
+
+// Adiciona filtro de status (processada/não processada)
+if ($filters['status'] === 'processed') {
+    $query .= " AND n.processada = 1";
+} elseif ($filters['status'] === 'pending') {
+    $query .= " AND n.processada = 0";
+}
+// Adiciona filtro de advogado se existir
+if (!empty($filters['advogado'])) {
+    $advogado_id = $filters['advogado'];
+    $advogado_name_query = "SELECT nome_advogado FROM advogados WHERE id_advogado = ?";
+    $advogado_name_stmt = $conn->prepare($advogado_name_query);
+    $advogado_name_stmt->bind_param("i", $advogado_id);
+    $advogado_name_stmt->execute();
+    $advogado_name_result = $advogado_name_stmt->get_result();
+    if ($advogado_name_result && $advogado_name_result->num_rows > 0) {
+        $advogado_name = $advogado_name_result->fetch_assoc()['nome_advogado'];
+        $query .= " AND n.advogados LIKE ?";
+        $param_advogado = "%" . $advogado_name . "%";
+        $params[] = $param_advogado;
+        $types .= "s";
+    }
+    $advogado_name_stmt->close();
+}
+
+$query .= $where_clause;
+$query .= " ORDER BY n.created_at DESC";
+
+$stmt = $conn->prepare($query);
+
+if (!empty($types)) {
+    $stmt->bind_param($types, ...$params);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+$notifications = [];
+
+while ($row = $result->fetch_assoc()) {
+    // Formata a data para exibição
+    $row['date'] = date('d/m/Y H:i', strtotime($row['created_at']));
+    
+    // Adiciona a mensagem formatada
+    $row['message'] = "Processo {$row['numero_processo']} ({$row['classe']}) - {$row['tribunal']}";
+    if (!empty($row['data_publicacao'])) {
+        $row['message'] .= " - Publicado em " . date('d/m/Y', strtotime($row['data_publicacao']));
+    }
+    
+    // Marca que a notificação está no banco de dados
+    $row['in_database'] = true;
+    
+    // Verifica se a coluna teor existe na tabela notifications
+    if (!isset($row['teor'])) {
+        // Primeiro verifica se a coluna 'teor' existe na tabela
+        $check_column = $conn->query("SHOW COLUMNS FROM notifications LIKE 'teor'");
+        
+        if ($check_column->num_rows > 0) {
+            // A coluna existe, podemos buscar o teor
+            $teor_query = "SELECT teor FROM notifications WHERE id = ?";
+            $teor_stmt = $conn->prepare($teor_query);
+            $teor_stmt->bind_param("i", $row['id']);
+            $teor_stmt->execute();
+            $teor_result = $teor_stmt->get_result();
+            
+            if ($teor_result->num_rows > 0) {
+                $teor_data = $teor_result->fetch_assoc();
+                $row['teor'] = $teor_data['teor'];
+            }
+            
+            $teor_stmt->close();
+        } else {
+            // A coluna não existe, vamos tentar adicioná-la
+            $add_column = $conn->query("ALTER TABLE notifications ADD COLUMN teor TEXT AFTER data_publicacao");
+            
+            if ($add_column) {
+                // Coluna adicionada com sucesso, mas o teor ainda estará vazio para registros existentes
+                error_log("Coluna 'teor' adicionada automaticamente à tabela notifications");
+            } else {
+                // Falha ao adicionar a coluna
+                error_log("Erro ao adicionar coluna 'teor': " . $conn->error);
+            }
+            
+            // Não temos teor para este registro ainda
+            $row['teor'] = '';
+        }
+    }
+    
+    $notifications[] = $row;
+}
+
+$stmt->close();
+
+// Obtém a lista de advogados vinculados à empresa do usuário
+$advogados = [];
+if (isset($_SESSION['company_id'])) {
+    $user_company_id = $_SESSION['company_id'];
+    
+    // Debug: Verificar company_id
+    error_log("Buscando advogados para company_id: $user_company_id");
+    
+    $advogados_query = "SELECT id_advogado, nome_advogado, oab_numero, oab_uf
+                       FROM advogados
+                       WHERE id_empresa = ?
+                       ORDER BY nome_advogado";
+                       
+    if ($advogados_stmt = $conn->prepare($advogados_query)) {
+        $advogados_stmt->bind_param("i", $user_company_id);
+        
+        if ($advogados_stmt->execute()) {
+            $advogados_result = $advogados_stmt->get_result();
+            
+            if ($advogados_result->num_rows > 0) {
+                while ($advogado = $advogados_result->fetch_assoc()) {
+                    $advogados[] = $advogado;
+                }
+            } else {
+                error_log("Nenhum advogado encontrado para company_id: $user_company_id");
+            }
+        } else {
+            error_log("Erro na execução da query: " . $advogados_stmt->error);
+        }
+        
+        $advogados_stmt->close();
+    } else {
+        error_log("Erro ao preparar query: " . $conn->error);
+    }
+} else {
+    error_log("company_id não definido na sessão");
+}
+
+// Obtém a lista de usuários para o formulário de criação de tarefas
+$users_query = "SELECT id_usuario as id, nome as name FROM usuarios WHERE ativo = 1 ORDER BY nome";
+$users_result = $conn->query($users_query);
+$users = [];
+
+if ($users_result) {
+    while ($user = $users_result->fetch_assoc()) {
+        $users[] = $user;
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Intimações Judiciais</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/unified.css">
+    <style>
+        .filters-container {
+            background-color: #f5f5f5;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .filter-item {
+            margin-bottom: 10px;
+        }
+        
+        .filter-item label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .filter-item select,
+        .filter-item input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .filter-buttons {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .filter-buttons button {
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+        
+        .notification-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .notification-table th,
+        .notification-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        .notification-table th {
+            background-color: #f2f2f2;
+        }
+        
+        .notification-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .db-icon {
+            display: inline-block;
+            margin-left: 5px;
+            color: #007bff;
+            font-size: 14px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            background-color: #ffecb3;
+            color: #856404;
+        }
+        
+        .status-processed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .action-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .view-button {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        /* Modal styles */
+        
+        .api-message {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            background-color: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <?php include 'header.php'; ?>
+    
+    <!-- Botão para abrir/fechar o painel de debug -->
+    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+        <button id="toggleDebugPanel" class="btn btn-info">
+            <i class="fas fa-bug"></i> Debug
+        </button>
+    </div>
+    
+    <!-- Painel de debug flutuante -->
+    <div id="debugPanel" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background-color: #f8f9fa; border-top: 3px solid #007bff; padding: 15px; z-index: 999; max-height: 50vh; overflow-y: auto; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <h3 style="margin: 0;">Informações de Debug</h3>
+            <button id="closeDebugPanel" class="btn btn-sm btn-danger">&times;</button>
+        </div>
+        
+        <div class="debug-content">
+            <h4>URL da API Construída:</h4>
+            <pre style="background-color: #272822; color: #f8f8f2; padding: 10px; border-radius: 4px; overflow: auto;"><?php
+                $debug_api_params = [];
+                // Adiciona o parâmetro meio (D = Diário)
+                $debug_api_params['meio'] = 'D';
+                
+                // Adiciona parâmetros de paginação
+                $debug_api_params['pagina'] = 1;
+                $debug_api_params['tamanhoPagina'] = 100;
+                
+                if (!empty($filters['oab_numero'])) $debug_api_params['numeroOab'] = $filters['oab_numero'];
+                if (!empty($filters['oab_uf'])) $debug_api_params['ufOab'] = $filters['oab_uf'];
+                if (!empty($filters['tribunal'])) $debug_api_params['siglaTribunal'] = $filters['tribunal'];
+                if (!empty($filters['classe'])) $debug_api_params['classe'] = $filters['classe'];
+                if (!empty($filters['termo'])) $debug_api_params['texto'] = $filters['termo'];
+                
+                // Adiciona filtros de data com os novos nomes de parâmetros
+                if (!empty($filters['data_inicio'])) {
+                    $debug_api_params['dataDisponibilizacaoInicio'] = $filters['data_inicio'];
+                } else {
+                    $debug_api_params['dataDisponibilizacaoInicio'] = date('Y-m-d', strtotime('-30 days'));
+                }
+                
+                if (!empty($filters['data_fim'])) {
+                    $debug_api_params['dataDisponibilizacaoFim'] = $filters['data_fim'];
+                } else {
+                    $debug_api_params['dataDisponibilizacaoFim'] = date('Y-m-d');
+                }
+                
+                $debug_url_params = http_build_query($debug_api_params);
+                $debug_api_url = "https://comunicaapi.pje.jus.br/api/v1/comunicacao?" . $debug_url_params;
+                echo htmlspecialchars($debug_api_url);
+            ?></pre>
+            
+            <h4>Parâmetros da Requisição:</h4>
+            <pre style="background-color: #272822; color: #f8f8f2; padding: 10px; border-radius: 4px; overflow: auto;"><?php echo htmlspecialchars(json_encode($filters, JSON_PRETTY_PRINT)); ?></pre>
+            
+            <?php if (file_exists('api.log')): ?>
+                <h4>Últimas entradas do log:</h4>
+                <pre style="background-color: #272822; color: #f8f8f2; padding: 10px; border-radius: 4px; overflow: auto; max-height: 200px;"><?php
+                    $log_content = file_get_contents('api.log');
+                    $log_lines = explode(PHP_EOL, $log_content);
+                    $last_lines = array_slice($log_lines, -20); // Últimas 20 linhas
+                    echo htmlspecialchars(implode(PHP_EOL, $last_lines));
+                ?></pre>
+            <?php endif; ?>
+            
+            <?php if (!empty($api_debug)): ?>
+                <h4>Resposta da API:</h4>
+                <pre style="background-color: #272822; color: #f8f8f2; padding: 10px; border-radius: 4px; overflow: auto;"><?php echo htmlspecialchars(json_encode($api_debug, JSON_PRETTY_PRINT)); ?></pre>
+            <?php endif; ?>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1>Intimações Judiciais</h1>
+        
+        <?php if (!empty($api_message)): ?>
+            <div class="api-message">
+                <?php echo htmlspecialchars($api_message); ?>
+            </div>
+        <?php endif; ?>
+        
+        <div class="filters-container">
+            <form method="GET" action="">
+                <div class="filters-grid">
+                    <!-- Existing filters... -->
+                    
+                    <div class="filter-item">
+                        <label for="advogado">Advogado:</label>
+                        <select name="advogado" id="advogado">
+                            <option value="">Todos</option>
+                            <?php foreach ($advogados as $adv): ?>
+                                <option value="<?= $adv['id_advogado'] ?>" <?= ($filters['advogado'] == $adv['id_advogado']) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($adv['nome_advogado']) ?> (OAB <?= $adv['oab_numero'] ?>/<?= $adv['oab_uf'] ?>)
+                                </option>
+                            <?php endforeach; ?>
+                            <?php if (empty($advogados)): ?>
+                                <option disabled>Nenhum advogado cadastrado</option>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+
+                    <!-- Remaining existing filters -->
+                </div>
+                <div class="filter-buttons">
+                    <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                    <a href="notifications.php" class="btn btn-secondary">Limpar Filtros</a>
+                    <?php if ($is_admin): ?>
+                        <button type="submit" name="fetch_api" value="1" class="btn btn-warning">Buscar na API</button>
+                    <?php endif; ?>
+                </div>
+            </form>
+        </div>
+
+        <?php if ($is_admin && !empty($api_debug)): ?>
+            <div class="debug-panel">
+                <h3>Informações de Debug (Apenas Admin)</h3>
+                <pre><?php echo htmlspecialchars(json_encode($api_debug, JSON_PRETTY_PRINT)); ?></pre>
+                
+                <?php if (file_exists('api.log')): ?>
+                    <h4>Últimas entradas do log:</h4>
+                    <pre><?php
+                        $log_content = file_get_contents('api.log');
+                        $log_lines = explode(PHP_EOL, $log_content);
+                        $last_lines = array_slice($log_lines, -20); // Últimas 20 linhas
+                        echo htmlspecialchars(implode(PHP_EOL, $last_lines));
+                    ?></pre>
+                <?php endif; ?>
+                
+                <h4>Teste com URLs específicas:</h4>
+                <p>
+                    <a href="https://janeri.com.br/gigajus/v2/notifications.php?classe=&termo=&tribunal=TJCE&oab_numero=25695&oab_uf=CE&data_inicio=<?php echo date('Y-m-d', strtotime('-30 days')); ?>&data_fim=<?php echo date('Y-m-d'); ?>&fetch_api=1"
+                       target="_blank" class="btn btn-info">
+                        Testar URL com parâmetros específicos (OAB 25695/CE)
+                    </a>
+                    <br><br>
+                    <a href="https://janeri.com.br/gigajus/v2/notifications.php?classe=&termo=&tribunal=&oab_numero=&oab_uf=&data_inicio=2025-04-08&data_fim=2025-04-08&fetch_api=1"
+                       target="_blank" class="btn btn-info">
+                        Testar URL com data específica
+                    </a>
+                </p>
+            </div>
+        <?php endif; ?>
+        
+        <div class="filters-container">
+            <form action="" method="get">
+                <div class="filters-grid">
+                    <div class="filter-item">
+                        <label for="classe">Classe:</label>
+                        <input type="text" id="classe" name="classe" value="<?php echo htmlspecialchars($filters['classe']); ?>">
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="termo">Termo:</label>
+                        <input type="text" id="termo" name="termo" value="<?php echo htmlspecialchars($filters['termo']); ?>">
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="tribunal">Tribunal:</label>
+                        <select id="tribunal" name="tribunal">
+                            <option value="">Todos</option>
+                            <?php foreach ($tribunais as $tribunal): ?>
+                                <option value="<?php echo htmlspecialchars($tribunal); ?>" <?php if ($filters['tribunal'] == $tribunal) echo 'selected'; ?>><?php echo htmlspecialchars($tribunal); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="data_inicio">Data Início:</label>
+                        <input type="date" id="data_inicio" name="data_inicio" value="<?php echo htmlspecialchars($filters['data_inicio']); ?>">
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="data_fim">Data Fim:</label>
+                        <input type="date" id="data_fim" name="data_fim" value="<?php echo htmlspecialchars($filters['data_fim']); ?>">
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="status">Status:</label>
+                        <select id="status" name="status">
+                            <option value="all" <?php if ($filters['status'] == 'all') echo 'selected'; ?>>Todos</option>
+                            <option value="processed" <?php if ($filters['status'] == 'processed') echo 'selected'; ?>>Processadas</option>
+                            <option value="pending" <?php if ($filters['status'] == 'pending') echo 'selected'; ?>>Pendentes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-item">
+                        <label for="advogado">Advogado:</label>
+                        <select id="advogado" name="advogado">
+                            <option value="">Todos</option>
+                            <?php
+                            if (isset($_SESSION['company_id']) && is_numeric($_SESSION['company_id'])) {
+                                $company_id = $_SESSION['company_id'];
+                                $advogados_query = "SELECT id, nome_advogado, oab_numero, oab_uf FROM advogados WHERE id_empresa = ? ORDER BY nome_advogado";
+                                error_log("Company ID: " . $company_id); // Debugging line
+                                $advogados_stmt = $conn->prepare($advogados_query);
+                                $advogados_stmt->bind_param("i", $company_id);
+                                $advogados_stmt->execute();
+                                $advogados_result = $advogados_stmt->get_result();
+                                while ($advogado = $advogados_result->fetch_assoc()) {
+                                    $advogado_nome = $advogado['nome_advogado'] . " (" . $advogado['oab_numero'] . "/" . $advogado['oab_uf'] . ")";
+                                    $advogado_nome = htmlspecialchars($advogado_nome);
+                                    $advogado_id = htmlspecialchars($advogado['id']);
+                                    $selected = ($filters['advogado'] == $advogado_id) ? 'selected' : '';
+                                    echo "<option value='" . $advogado_id . "' " . $selected . ">" . $advogado_nome . "</option>";
+                                }
+                                $advogados_stmt->close();
+                            }
+                            ?>
+                            }
+                            $advogados_stmt->close();
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="filter-buttons">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                    <button type="button" class="btn btn-success" onclick="window.location.href='notifications.php?fetch_api=1&amp;<?php echo htmlspecialchars(http_build_query($filters)); ?>'">
+                        Buscar na API
+                    </button>
+                    <button type="reset" class="btn btn-secondary" onclick="window.location.href='notifications.php'">Limpar</button>
+                </div>
+            </form>
+        </div>
+        
+        <table class="notification-table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Mensagem</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (empty($notifications)): ?>
+                    <tr>
+                        <td colspan="3">Nenhuma intimação encontrada.</td>
+                    </tr>
+                <?php else: ?>
+                    <?php foreach ($notifications as $notification): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($notification['date']); ?></td>
+                            <td><?php echo htmlspecialchars($notification['message']); ?></td>
+                            <td>
+                                <button class="action-button view-button" onclick="window.location.href='view_notification.php?id=<?php echo htmlspecialchars($notification['id']); ?>'">
+                                    Visualizar
+                                </button>
+                                <?php if ($is_admin): ?>
+                                    <button class="action-button" onclick="window.location.href='process_notification.php?id=<?php echo htmlspecialchars($notification['id']); ?>'">
+                                        Processar
+                                    </button>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Inicializa o painel de debug
+            var debugPanel = $('#debugPanel');
+            var toggleDebugPanelButton = $('#toggleDebugPanel');
+            var closeDebugPanelButton = $('#closeDebugPanel');
+            
+            // Função para mostrar/esconder o painel de debug
+            toggleDebugPanelButton.click(function() {
+                debugPanel.slideToggle();
+            });
+            
+            // Função para fechar o painel de debug
+            closeDebugPanelButton.click(function() {
+                debugPanel.slideUp();
+            });
+        });
+    </script>
+</body>
+</html>

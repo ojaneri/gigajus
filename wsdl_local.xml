@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="www.contatodiario.com.br?wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="www.contatodiario.com.br?wsdl">
+<types>
+<xsd:schema targetNamespace="www.contatodiario.com.br?wsdl"
+>
+ <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+ <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+ <xsd:complexType name="Register">
+  <xsd:all>
+   <xsd:element name="cdLancamento" type="xsd:int"/>
+   <xsd:element name="dtPublicacao" type="xsd:string"/>
+   <xsd:element name="dtDivulgacao" type="xsd:string"/>
+   <xsd:element name="dtAtualizacao" type="xsd:string"/>
+   <xsd:element name="nrProcesso" type="xsd:string"/>
+   <xsd:element name="nmAdvogado" type="xsd:string"/>
+   <xsd:element name="nmJornal" type="xsd:string"/>
+   <xsd:element name="nrDiario" type="xsd:string"/>
+   <xsd:element name="dsIntimacao" type="xsd:string"/>
+  </xsd:all>
+ </xsd:complexType>
+ <xsd:complexType name="Registers">
+  <xsd:complexContent>
+   <xsd:restriction base="SOAP-ENC:Array">
+   <xsd:element name="Registers" type="tns:Register"/>
+    <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Register[]"/>
+   </xsd:restriction>
+  </xsd:complexContent>
+ </xsd:complexType>
+</xsd:schema>
+</types>
+<message name="getRecordsRequest">
+  <part name="username" type="xsd:string" />
+  <part name="password" type="xsd:string" />
+  <part name="datetime" type="xsd:string" /></message>
+<message name="getRecordsResponse">
+  <part name="Registers" type="tns:Registers" /></message>
+<portType name="www.contatodiario.com.brPortType">
+  <operation name="getRecords">
+    <documentation>Retorna a lista de processos 
+	desde a ultima atualização conforme 
+	data informada (yyyymmddhh24miss)</documentation>
+    <input message="tns:getRecordsRequest"/>
+    <output message="tns:getRecordsResponse"/>
+  </operation>
+</portType>
+<binding name="www.contatodiario.com.brBinding" type="tns:www.contatodiario.com.brPortType">
+  <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <operation name="getRecords">
+    <soap:operation soapAction="www.contatodiario.com.br?wsdl#getRecords" style="rpc"/>
+    <input><soap:body use="encoded" namespace="www.contatodiario.com.br?wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+    <output><soap:body use="encoded" namespace="www.contatodiario.com.br?wsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+  </operation>
+</binding>
+<service name="www.contatodiario.com.br">
+  <port name="www.contatodiario.com.brPort" binding="tns:www.contatodiario.com.brBinding">
+    <soap:address location="https://www.contatodiario.com.br:443/services/ws.php"/>
+  </port>
+</service>
+</definitions>

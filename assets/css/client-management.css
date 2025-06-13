@@ -1,0 +1,282 @@
+/* 
+ * Estilos específicos para gerenciamento de clientes
+ * Complementa o arquivo unified.css com estilos específicos para as páginas de clientes
+ */
+
+/* Estilos para o formulário de edição de cliente */
+.form-container {
+    background-color: var(--bg-primary);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.form-header {
+    background-color: var(--bg-secondary);
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-title {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.status-ativo {
+    background-color: var(--status-completed-bg);
+    color: var(--status-completed-text);
+}
+
+.status-inativo {
+    background-color: var(--status-late-bg);
+    color: var(--status-late-text);
+}
+
+.improved-form {
+    padding: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group.full-width {
+    grid-column: span 2;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--btn-primary-bg);
+    outline: none;
+}
+
+.error-message {
+    color: var(--status-late-text);
+    font-size: 0.8rem;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Estilos para seções do formulário */
+.form-section {
+    margin-bottom: 30px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.section-title {
+    background-color: var(--bg-secondary);
+    padding: 10px 15px;
+    margin: 0;
+    font-size: 1.2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section-content {
+    padding: 15px;
+}
+
+/* Estilos para outros dados */
+.outros-dados-container {
+    margin-bottom: 15px;
+}
+
+.outro-dado-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.outro-dado-inputs {
+    display: flex;
+    flex-grow: 1;
+    gap: 10px;
+}
+
+.btn-add-field {
+    margin-top: 10px;
+}
+
+.btn-remove {
+    margin-left: 10px;
+    color: var(--status-late-text);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Estilos para ações do formulário */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Estilos para zona de risco */
+.danger-zone {
+    border-color: var(--status-late-text);
+}
+
+.danger-zone .section-title {
+    background-color: var(--status-late-bg);
+    color: var(--status-late-text);
+}
+
+.danger-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Estilos para botões */
+.btn {
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background-color: var(--btn-primary-bg);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: var(--btn-secondary-bg);
+    color: white;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-warning {
+    background-color: #f39c12;
+    color: white;
+}
+
+.btn-info {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-icon {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+/* Estilos para modal de confirmação */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 5px;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 15px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.warning-text {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.warning-list {
+    margin-bottom: 20px;
+}

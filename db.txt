@@ -1,0 +1,4 @@
+host=
+user=gigajus
+pass=gigajus
+dbname=gigajus

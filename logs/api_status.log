@@ -1,0 +1,21 @@
+[2025-05-16 11:00:21] [INFO] Iniciando verificação de status da API e proxy
+[2025-05-16 11:00:21] [INFO] Verificando proxy SOCKS5: 200.234.178.126:59101
+[2025-05-16 11:00:21] [SUCCESS] Proxy SOCKS5 está respondendo ao ping
+[2025-05-16 11:00:21] [SUCCESS] Proxy SOCKS5 está funcionando corretamente
+[2025-05-16 11:00:21] [DEBUG] Tempo de resposta: 0.542884s
+[2025-05-16 11:00:21] [INFO] Verificando API: https://comunicaapi.pje.jus.br/api/v1/comunicacao
+[2025-05-16 11:00:21] [SUCCESS] Servidor da API está respondendo ao ping
+[2025-05-16 11:00:21] [WARNING] API respondeu com status code: 403
+[2025-05-16 11:00:21] [DEBUG] Tempo de resposta: 0.016881s
+[2025-05-16 11:00:21] [DEBUG] Resposta: <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML><HEAD><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<TITLE>ERROR...
+[2025-05-16 11:00:32] [WARNING] API via proxy respondeu com status code: 500
+[2025-05-16 11:00:32] [DEBUG] Tempo de resposta: 10.744956s
+[2025-05-16 11:00:32] [DEBUG] Resposta: {
+    "message": "Server Error"
+}...
+[2025-05-16 11:00:32] [INFO] Resumo da verificação:
+[2025-05-16 11:00:32] [INFO] Proxy SOCKS5: OK
+[2025-05-16 11:00:32] [INFO] API: FALHA
+[2025-05-16 11:00:32] [INFO] Verificação concluída

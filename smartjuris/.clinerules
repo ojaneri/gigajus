@@ -1,0 +1,124 @@
+---
+versao: 1.0.0  
+data: 2025-05-01  
+autor: Osvaldo Janeri Filho <osvaldo@janeri.com.br>  
+changelog: veja memory-bank/changelog.md  
+---
+
+# Sumário
+1. Estrutura Geral  
+2. Diretórios e Organização  
+3. CSS e JS Unificados  
+4. Banco de Dados  
+5. Entrada e Processamento  
+6. Debug e Logs  
+7. Tolerância a Falhas  
+8. Testes Automatizados  
+9. Regras para Console e Deploy  
+10. Documentação em memory-bank  
+
+---
+
+## 1. Estrutura Geral
+
+- Sistema de análise de decisões judiciais com extração automática via OpenAI API.
+- Multi-escritório com usuários independentes e dados isolados.
+- Acessível via: https://janeri.com.br/sistemas/smartjuris/
+- Layout modular, responsivo e com design centralizado.
+
+---
+
+## 2. Diretórios e Organização
+
+- `assets/css/style.css` → CSS único, atualizado propaga para todo o sistema.
+- `assets/js/main.js` → JS único, modularizado por função.
+- `bd/` → arquivos PHP de alteração de banco. Só executáveis via CLI.
+- `testes/` → testes automatizados PHP (PHPUnit).
+- `logs/` → arquivos de log: `debug.log`, `erros.log`, `sql.log`.
+- `memory-bank/` → arquivos de referência e contexto para IA.
+- `functions/` → `functions_bd.php`, `functions_openai.php`, etc. Arquivos > 500 linhas devem ser divididos.
+- `includes/` → `header.php`, `footer.php`, `auth_check.php`.
+
+---
+
+## 3. CSS e JS Unificados
+
+- Paleta oficial:  
+  - Fundo: #f9fafb  
+  - Primária: #1f2937  
+  - Secundária: #3b82f6  
+  - Sucesso: #10b981  
+  - Erro: #ef4444  
+- CSS deve usar classes BEM e sem inline, salvo exceções.
+- JS em ES6 modules, dividido em arquivos conforme escopo.
+
+---
+
+## 4. Banco de Dados
+
+- Nomenclatura: snake_case.
+- Tabelas principais: `usuarios`, `escritorios`, `decisoes`, `logs`.
+- `decisoes` armazena texto original e campos extraídos: numero_processo, relator, vara, data_julgamento, procedente, dano_moral, etc.
+- Scripts como `altera_bd.php` com suporte a `--dry-run`.
+
+---
+
+## 5. Entrada e Processamento
+
+- Entrada: textarea para colagem + upload de PDF.
+- Chamada à OpenAI API retorna JSON com dados estruturados.
+- JSON armazenado no campo `resultado_json` + colunas individuais.
+- Categorias são pré-definidas (ex: fraude, consignado, revisão).
+- Relatórios com Chart.js: % procedência por vara, valor médio, etc.
+
+---
+
+## 6. Debug e Logs
+
+- Presença de arquivo `/debug` ativa modo debug.
+- Em debug: botão flutuante em todas as páginas → `/debug.php`.
+- Acesso via navegador com `?debug=1` pula autenticação (somente com `/debug` presente).
+- Logs gravados em banco (`logs`) e arquivos (`logs/*.log`).
+- Página `debug.php` lista últimas linhas com filtros por tipo, data, arquivo.
+
+---
+
+## 7. Tolerância a Falhas
+
+- Uso extensivo de `try/catch` para evitar erros fatais.
+- Em exceções, exibir erro detalhado se debug ativo.
+- Se erro grave, direcionar para `erro500.php`.
+- Página `erro404.php` e `erro500.php` mostram stack trace e variáveis se debug on.
+
+---
+
+## 8. Testes Automatizados
+
+- `testes/`: organizado por módulo.
+- Framework: PHPUnit.
+- Script `run_tests.sh`: executa todos os testes.
+- Testes obrigatórios antes de qualquer deploy.
+- Exemplo: `./run_tests.sh` ou `wget -qO- /sistemas/smartjuris/testa.php?debug=1`.
+
+---
+
+## 9. Regras para Console e Deploy
+
+- Arquivos em `bd/` só podem ser executados via terminal (`php nome.php`).
+- Verificar `php_sapi_name()` para bloquear execuções via navegador.
+- Variáveis sensíveis, caminhos e URLs ficam em `config.php`.
+- Commits atômicos, versionamento em `memory-bank/changelog.md`.
+
+---
+
+## 10. Documentação em memory-bank
+
+- `projectbrief.md` → resumo do sistema.
+- `product_context.md`, `tech_context.md`, `system_patterns.md` → ambiente e arquitetura.
+- `functions.md` → lista e assinatura das funções implementadas.
+- `bugs.md` → problemas, causa, solução aplicada.
+- `changelog.md` → histórico de mudanças por versão.
+- Deve ser sempre lido pela IA no início de cada nova sessão.
+
+---
+
