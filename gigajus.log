@@ -7664,3 +7664,37 @@ O cliente quer saber qual será o procedimento agora. Informou que quer dar cont
 2025-06-13 11:22:32 - [upload_handler.php] Passo 3.5: Movendo arquivo para uploads/clientes/JOSE EDISIO DE LUCENA (ID 82)/JOSE EDISIO DE LUCENA - HISTORICO DE EMPRESTIMO CONSIGNADO.pdf.
 2025-06-13 11:22:32 - [upload_handler.php] Passo 3.6: Arquivo JOSE EDISIO DE LUCENA - HISTORICO DE EMPRESTIMO CONSIGNADO.pdf enviado com sucesso para uploads/clientes/JOSE EDISIO DE LUCENA (ID 82)/JOSE EDISIO DE LUCENA - HISTORICO DE EMPRESTIMO CONSIGNADO.pdf.
 2025-06-13 11:22:32 - [upload_handler.php] Passo 3.7: Descrição do arquivo salva em uploads/clientes/JOSE EDISIO DE LUCENA (ID 82)/JOSE EDISIO DE LUCENA - HISTORICO DE EMPRESTIMO CONSIGNADO.pdf.descricao.txt.
+2025-06-13 11:22:32 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Passo 1: Verificando se o ID do cliente foi passado.
+2025-06-13 11:22:32 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Passo 1.2: ID do cliente recebido: 82
+2025-06-13 11:22:32 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Passo 1.3: Recuperando nome do cliente do banco de dados.
+2025-06-13 11:22:32 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Cliente encontrado: JOSE EDISIO DE LUCENA
+2025-06-13 11:22:32 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Passo 2: Definindo o diretório de upload: uploads/clientes/JOSE EDISIO DE LUCENA (ID 82)/
+2025-06-13 11:22:32 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Passo 2.5: Pasta uploads/clientes/JOSE EDISIO DE LUCENA (ID 82)/ já existe.
+2025-06-13 11:22:32 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Passo 3: Listando arquivos no diretório uploads/clientes/JOSE EDISIO DE LUCENA (ID 82)/.
+2025-06-13 11:24:42 - [upload_handler.php] Passo 1: Iniciando o upload_handler.php
+2025-06-13 11:24:42 - [upload_handler.php] Passo 2: Verificando se o ID do cliente foi passado.
+2025-06-13 11:24:42 - [upload_handler.php] Passo 2.2: ID do cliente recebido: 82
+2025-06-13 11:24:42 - [upload_handler.php] Passo 3: Verificando se um arquivo foi enviado.
+2025-06-13 11:24:42 - [upload_handler.php] Passo 3.1: Arquivo encontrado no POST.
+2025-06-13 11:24:42 - [upload_handler.php] Passo 3.2: O arquivo foi enviado com sucesso.
+2025-06-13 11:24:42 - [upload_handler.php] Passo 3.3: Detalhes do arquivo: Array
+(
+    [name] => JOSE EDISIO DE LUCENA - MODELO RMC.docx
+    [full_path] => JOSE EDISIO DE LUCENA - MODELO RMC.docx
+    [type] => application/vnd.openxmlformats-officedocument.wordprocessingml.document
+    [tmp_name] => /tmp/phpAB5dj9
+    [error] => 0
+    [size] => 118864
+)
+
+2025-06-13 11:24:42 - [upload_handler.php] Passo 3.4: Nenhum erro no upload do arquivo.
+2025-06-13 11:24:42 - [upload_handler.php] Passo 3.5: Movendo arquivo para uploads/clientes/JOSE EDISIO DE LUCENA (ID 82)/JOSE EDISIO DE LUCENA - MODELO RMC.docx.
+2025-06-13 11:24:42 - [upload_handler.php] Passo 3.6: Arquivo JOSE EDISIO DE LUCENA - MODELO RMC.docx enviado com sucesso para uploads/clientes/JOSE EDISIO DE LUCENA (ID 82)/JOSE EDISIO DE LUCENA - MODELO RMC.docx.
+2025-06-13 11:24:42 - [upload_handler.php] Passo 3.7: Descrição do arquivo salva em uploads/clientes/JOSE EDISIO DE LUCENA (ID 82)/JOSE EDISIO DE LUCENA - MODELO RMC.docx.descricao.txt.
+2025-06-13 11:24:42 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Passo 1: Verificando se o ID do cliente foi passado.
+2025-06-13 11:24:42 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Passo 1.2: ID do cliente recebido: 82
+2025-06-13 11:24:42 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Passo 1.3: Recuperando nome do cliente do banco de dados.
+2025-06-13 11:24:42 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Cliente encontrado: JOSE EDISIO DE LUCENA
+2025-06-13 11:24:42 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Passo 2: Definindo o diretório de upload: uploads/clientes/JOSE EDISIO DE LUCENA (ID 82)/
+2025-06-13 11:24:42 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Passo 2.5: Pasta uploads/clientes/JOSE EDISIO DE LUCENA (ID 82)/ já existe.
+2025-06-13 11:24:42 - [arquivos_client.php] /var/www/html/admin.janeri.com.br/gigajus/v2/arquivos_client.php Passo 3: Listando arquivos no diretório uploads/clientes/JOSE EDISIO DE LUCENA (ID 82)/.
