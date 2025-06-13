@@ -13,7 +13,8 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Variáveis para armazenar os dados do cliente
-$nome = $cpf_cnpj = $endereco = $telefone = $email = "";
+$nome = $cpf_cnpj = $telefone = $email = "";
+$cep = $logradouro = $numero = $complemento = $bairro = $cidade = $estado = "";
 $errors = [];
 
 // Variáveis para outros dados
@@ -23,9 +24,25 @@ $outros_dados = [];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = $_POST['nome'] ?? '';
     $cpf_cnpj = !empty($_POST['cpf_cnpj']) ? $_POST['cpf_cnpj'] : null;
-    $endereco = $_POST['endereco'] ?? '';
     $telefone = $_POST['telefone'] ?? '';
     $email = !empty($_POST['email']) ? $_POST['email'] : null;
+    
+    // Dados de endereço
+    $cep = $_POST['cep'] ?? '';
+    $logradouro = $_POST['logradouro'] ?? '';
+    $numero = $_POST['numero'] ?? '';
+    $complemento = $_POST['complemento'] ?? '';
+    $bairro = $_POST['bairro'] ?? '';
+    $cidade = $_POST['cidade'] ?? '';
+    $estado = $_POST['estado'] ?? '';
+    
+    // Montar o endereço completo para manter compatibilidade
+    $endereco = "$logradouro, $numero";
+    if (!empty($complemento)) $endereco .= ", $complemento";
+    if (!empty($bairro)) $endereco .= ", $bairro";
+    $endereco .= " - $cidade/$estado";
+    if (!empty($cep)) $endereco .= " - CEP: $cep";
+    
     $outros_dados = $_POST['outros_dados'] ?? [];
 
     // Validar os dados (você pode adicionar mais validações conforme necessário)
@@ -37,25 +54,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Inserir no banco de dados se não houver erros
     if (empty($errors)) {
-        $sql = "INSERT INTO clientes (nome, cpf_cnpj, endereco, telefone, email, outros_dados) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO clientes (nome, cpf_cnpj, endereco, telefone, email,
+                cep, logradouro, numero, complemento, bairro, cidade, estado, outros_dados)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $outros_dados_json = json_encode($outros_dados);
         
         // Construir a query baseada nos campos que podem ser null
         if ($cpf_cnpj === null && $email === null) {
-            $sql = "INSERT INTO clientes (nome, cpf_cnpj, endereco, telefone, email, outros_dados) VALUES (?, NULL, ?, ?, NULL, ?)";
+            $sql = "INSERT INTO clientes (nome, cpf_cnpj, endereco, telefone, email,
+                    cep, logradouro, numero, complemento, bairro, cidade, estado, outros_dados)
+                    VALUES (?, NULL, ?, ?, NULL, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssss", $nome, $endereco, $telefone, $outros_dados_json);
+            $stmt->bind_param("ssssssssssss", $nome, $endereco, $telefone,
+                              $cep, $logradouro, $numero, $complemento, $bairro, $cidade, $estado, $outros_dados_json);
         } else if ($cpf_cnpj === null) {
-            $sql = "INSERT INTO clientes (nome, cpf_cnpj, endereco, telefone, email, outros_dados) VALUES (?, NULL, ?, ?, ?, ?)";
+            $sql = "INSERT INTO clientes (nome, cpf_cnpj, endereco, telefone, email,
+                    cep, logradouro, numero, complemento, bairro, cidade, estado, outros_dados)
+                    VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $nome, $endereco, $telefone, $email, $outros_dados_json);
+            $stmt->bind_param("sssssssssssss", $nome, $endereco, $telefone, $email,
+                              $cep, $logradouro, $numero, $complemento, $bairro, $cidade, $estado, $outros_dados_json);
         } else if ($email === null) {
-            $sql = "INSERT INTO clientes (nome, cpf_cnpj, endereco, telefone, email, outros_dados) VALUES (?, ?, ?, ?, NULL, ?)";
+            $sql = "INSERT INTO clientes (nome, cpf_cnpj, endereco, telefone, email,
+                    cep, logradouro, numero, complemento, bairro, cidade, estado, outros_dados)
+                    VALUES (?, ?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $nome, $cpf_cnpj, $endereco, $telefone, $outros_dados_json);
+            $stmt->bind_param("sssssssssssss", $nome, $cpf_cnpj, $endereco, $telefone,
+                              $cep, $logradouro, $numero, $complemento, $bairro, $cidade, $estado, $outros_dados_json);
         } else {
-            $stmt->bind_param("ssssss", $nome, $cpf_cnpj, $endereco, $telefone, $email, $outros_dados_json);
+            $stmt->bind_param("sssssssssssss", $nome, $cpf_cnpj, $endereco, $telefone, $email,
+                              $cep, $logradouro, $numero, $complemento, $bairro, $cidade, $estado, $outros_dados_json);
         }
         if ($stmt->execute()) {
             // Obter o ID do cliente recém-inserido
@@ -114,44 +143,255 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
         
         <form method="POST" action="create_client.php" onsubmit="return validateForm()" class="improved-form">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="nome" title="Insira o nome completo do cliente">
-                        <i class="fas fa-user"></i> Nome
-                    </label>
-                    <input type="text" id="nome" name="nome" value="<?php echo htmlspecialchars($nome); ?>" required class="form-control">
+            <!-- Informações básicas do cliente -->
+            <div class="form-section client-info-section">
+                <h3 class="section-title"><i class="fas fa-user"></i> Informações Básicas</h3>
+                <div class="section-content">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="nome" title="Insira o nome completo do cliente">
+                                <i class="fas fa-user"></i> Nome
+                            </label>
+                            <input type="text" id="nome" name="nome" value="<?php echo htmlspecialchars($nome); ?>" required class="form-control">
+                        </div>
+                        
+                        <div class="form-group col-md-6">
+                            <label for="cpf_cnpj" title="Insira o CPF ou CNPJ do cliente">
+                                <i class="fas fa-id-card"></i> CPF/CNPJ
+                            </label>
+                            <input type="text" id="cpf_cnpj" name="cpf_cnpj" value="<?php echo htmlspecialchars($cpf_cnpj); ?>" oninput="formatCPF(this)" class="form-control">
+                            <span id="cpf_error" class="error-message"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="telefone" title="Insira o telefone do cliente">
+                                <i class="fas fa-phone"></i> Telefone
+                            </label>
+                            <input type="text" id="telefone" name="telefone" value="<?php echo htmlspecialchars($telefone); ?>" oninput="formatPhone(this)" class="form-control">
+                            <span id="phone_error" class="error-message"></span>
+                        </div>
+                        
+                        <div class="form-group col-md-6">
+                            <label for="email" title="Insira o email do cliente">
+                                <i class="fas fa-envelope"></i> Email
+                            </label>
+                            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>" oninput="validateEmail(this)" class="form-control">
+                            <span id="email_error" class="error-message"></span>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="cpf_cnpj" title="Insira o CPF ou CNPJ do cliente">
-                        <i class="fas fa-id-card"></i> CPF/CNPJ
-                    </label>
-                    <input type="text" id="cpf_cnpj" name="cpf_cnpj" value="<?php echo htmlspecialchars($cpf_cnpj); ?>" oninput="formatCPF(this)" class="form-control">
-                    <span id="cpf_error" class="error-message"></span>
+            </div>
+            
+            <!-- Seção de endereço -->
+            <div class="form-section endereco-section">
+                    <h3 class="section-title"><i class="fas fa-map-marker-alt"></i> Endereço</h3>
+                    <div class="section-content">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="cep" title="Insira o CEP para busca automática">
+                                    <i class="fas fa-search"></i> CEP
+                                </label>
+                                <div class="input-group">
+                                    <input type="text" id="cep" name="cep" value="<?php echo htmlspecialchars($cep); ?>"
+                                        placeholder="00000-000" class="form-control" maxlength="9">
+                                    <div class="input-group-append">
+                                        <button type="button" id="buscarCep" class="btn btn-secondary">
+                                            <i class="fas fa-search"></i> Buscar
+                                        </button>
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">Digite o CEP e clique em Buscar para preencher o endereço automaticamente</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-9">
+                                <label for="logradouro" title="Nome da rua, avenida, etc.">
+                                    <i class="fas fa-road"></i> Logradouro
+                                </label>
+                                <input type="text" id="logradouro" name="logradouro" value="<?php echo htmlspecialchars($logradouro); ?>"
+                                    placeholder="Rua, Avenida, etc." class="form-control">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="numero" title="Número do endereço">
+                                    <i class="fas fa-hashtag"></i> Número
+                                </label>
+                                <input type="text" id="numero" name="numero" value="<?php echo htmlspecialchars($numero); ?>"
+                                    placeholder="Nº" class="form-control">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="complemento" title="Complemento do endereço (apto, bloco, etc.)">
+                                    <i class="fas fa-info-circle"></i> Complemento
+                                </label>
+                                <input type="text" id="complemento" name="complemento" value="<?php echo htmlspecialchars($complemento); ?>"
+                                    placeholder="Apto, Bloco, etc." class="form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="bairro" title="Bairro do endereço">
+                                    <i class="fas fa-map"></i> Bairro
+                                </label>
+                                <input type="text" id="bairro" name="bairro" value="<?php echo htmlspecialchars($bairro); ?>"
+                                    placeholder="Bairro" class="form-control">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label for="cidade" title="Cidade do endereço">
+                                    <i class="fas fa-city"></i> Cidade
+                                </label>
+                                <input type="text" id="cidade" name="cidade" value="<?php echo htmlspecialchars($cidade); ?>"
+                                    placeholder="Cidade" class="form-control">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="estado" title="Estado (UF)">
+                                    <i class="fas fa-map-marked-alt"></i> Estado
+                                </label>
+                                <select id="estado" name="estado" class="form-control">
+                                    <option value="">Selecione</option>
+                                    <?php
+                                    $estados = array(
+                                        'AC' => 'Acre', 'AL' => 'Alagoas', 'AP' => 'Amapá', 'AM' => 'Amazonas', 'BA' => 'Bahia',
+                                        'CE' => 'Ceará', 'DF' => 'Distrito Federal', 'ES' => 'Espírito Santo', 'GO' => 'Goiás',
+                                        'MA' => 'Maranhão', 'MT' => 'Mato Grosso', 'MS' => 'Mato Grosso do Sul', 'MG' => 'Minas Gerais',
+                                        'PA' => 'Pará', 'PB' => 'Paraíba', 'PR' => 'Paraná', 'PE' => 'Pernambuco', 'PI' => 'Piauí',
+                                        'RJ' => 'Rio de Janeiro', 'RN' => 'Rio Grande do Norte', 'RS' => 'Rio Grande do Sul',
+                                        'RO' => 'Rondônia', 'RR' => 'Roraima', 'SC' => 'Santa Catarina', 'SP' => 'São Paulo',
+                                        'SE' => 'Sergipe', 'TO' => 'Tocantins'
+                                    );
+                                    
+                                    foreach ($estados as $sigla => $nome) {
+                                        $selected = ($estado == $sigla) ? 'selected' : '';
+                                        echo "<option value=\"$sigla\" $selected>$sigla - $nome</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="telefone" title="Insira o telefone do cliente">
-                        <i class="fas fa-phone"></i> Telefone
-                    </label>
-                    <input type="text" id="telefone" name="telefone" value="<?php echo htmlspecialchars($telefone); ?>" oninput="formatPhone(this)" class="form-control">
-                    <span id="phone_error" class="error-message"></span>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email" title="Insira o email do cliente">
-                        <i class="fas fa-envelope"></i> Email
-                    </label>
-                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>" oninput="validateEmail(this)" class="form-control">
-                    <span id="email_error" class="error-message"></span>
-                </div>
-                
-                <div class="form-group full-width">
-                    <label for="endereco" title="Insira o endereço completo do cliente">
-                        <i class="fas fa-map-marker-alt"></i> Endereço
-                    </label>
-                    <textarea id="endereco" name="endereco" class="form-control"><?php echo htmlspecialchars($endereco); ?></textarea>
-                </div>
+
+                <style>
+                    /* Reset e ajustes globais */
+                    .form-container {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        padding: 0 !important;
+                    }
+                    
+                    /* Estilos para o formulário */
+                    .improved-form {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                    }
+                    
+                    /* Estilos para todas as seções */
+                    .form-section {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        margin: 0 0 20px 0 !important;
+                        padding: 0 !important;
+                        box-sizing: border-box !important;
+                        clear: both !important;
+                    }
+                    
+                    .section-title {
+                        margin-bottom: 15px !important;
+                        padding-bottom: 10px !important;
+                        border-bottom: 1px solid #e0e0e0 !important;
+                        width: 100% !important;
+                    }
+                    
+                    .section-content {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        padding: 15px !important;
+                        background-color: #f9f9f9 !important;
+                        border-radius: 5px !important;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+                        box-sizing: border-box !important;
+                        overflow: hidden !important;
+                    }
+                    
+                    /* Estilos para as linhas e colunas */
+                    .form-row {
+                        display: flex !important;
+                        flex-wrap: wrap !important;
+                        margin-right: -10px !important;
+                        margin-left: -10px !important;
+                        width: 100% !important;
+                        margin-bottom: 15px !important;
+                        box-sizing: border-box !important;
+                        clear: both !important;
+                    }
+                    
+                    .form-group {
+                        padding-right: 10px !important;
+                        padding-left: 10px !important;
+                        margin-bottom: 15px !important;
+                        box-sizing: border-box !important;
+                    }
+                    
+                    /* Definição das colunas */
+                    .col-md-9 {
+                        flex: 0 0 75% !important;
+                        max-width: 75% !important;
+                        box-sizing: border-box !important;
+                    }
+                    
+                    .col-md-8 {
+                        flex: 0 0 66.666667% !important;
+                        max-width: 66.666667% !important;
+                        box-sizing: border-box !important;
+                    }
+                    
+                    .col-md-6 {
+                        flex: 0 0 50% !important;
+                        max-width: 50% !important;
+                        box-sizing: border-box !important;
+                    }
+                    
+                    .col-md-4 {
+                        flex: 0 0 33.333333% !important;
+                        max-width: 33.333333% !important;
+                        box-sizing: border-box !important;
+                    }
+                    
+                    .col-md-3 {
+                        flex: 0 0 25% !important;
+                        max-width: 25% !important;
+                        box-sizing: border-box !important;
+                    }
+                    
+                    /* Estilos específicos para a seção de informações básicas */
+                    .client-info-section .section-content {
+                        background-color: #f0f7ff !important;
+                    }
+                    
+                    /* Estilos específicos para a seção de endereço */
+                    .endereco-section .section-content {
+                        background-color: #f9f9f9 !important;
+                    }
+                    
+                    /* Responsividade para telas menores */
+                    @media (max-width: 768px) {
+                        .col-md-3,
+                        .col-md-4,
+                        .col-md-6,
+                        .col-md-8,
+                        .col-md-9 {
+                            flex: 0 0 100% !important;
+                            max-width: 100% !important;
+                        }
+                    }
+                </style>
                 
                 <div class="form-group full-width">
                     <label title="Insira outros dados relevantes do cliente">
@@ -177,6 +417,83 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 
 <script>
+    // Função para formatar o CEP
+    function formatarCEP(cep) {
+        cep = cep.replace(/\D/g, ''); // Remove caracteres não numéricos
+        if (cep.length > 5) {
+            cep = cep.substring(0, 5) + '-' + cep.substring(5);
+        }
+        return cep;
+    }
+    
+    // Função para buscar endereço pelo CEP
+    function buscarEnderecoPorCEP(cep) {
+        // Remove caracteres não numéricos
+        cep = cep.replace(/\D/g, '');
+        
+        if (cep.length !== 8) {
+            alert('CEP inválido. O CEP deve conter 8 dígitos.');
+            return;
+        }
+        
+        // Mostrar indicador de carregamento
+        document.getElementById('buscarCep').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        
+        // Fazer requisição para a API ViaCEP
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.erro) {
+                    alert('CEP não encontrado.');
+                } else {
+                    // Preencher os campos com os dados retornados
+                    document.getElementById('logradouro').value = data.logradouro;
+                    document.getElementById('bairro').value = data.bairro;
+                    document.getElementById('cidade').value = data.localidade;
+                    document.getElementById('estado').value = data.uf;
+                    
+                    // Focar no campo número para facilitar o preenchimento
+                    document.getElementById('numero').focus();
+                }
+                
+                // Restaurar o botão de busca
+                document.getElementById('buscarCep').innerHTML = '<i class="fas fa-search"></i> Buscar';
+            })
+            .catch(error => {
+                console.error('Erro ao buscar CEP:', error);
+                alert('Erro ao buscar CEP. Verifique sua conexão e tente novamente.');
+                document.getElementById('buscarCep').innerHTML = '<i class="fas fa-search"></i> Buscar';
+            });
+    }
+    
+    // Inicializar eventos quando o documento estiver pronto
+    document.addEventListener('DOMContentLoaded', function() {
+        // Adicionar evento ao campo de CEP para formatação
+        const cepInput = document.getElementById('cep');
+        if (cepInput) {
+            cepInput.addEventListener('input', function() {
+                this.value = formatarCEP(this.value);
+            });
+            
+            // Adicionar evento para buscar CEP ao pressionar Enter
+            cepInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    buscarEnderecoPorCEP(this.value);
+                }
+            });
+        }
+        
+        // Adicionar evento ao botão de busca de CEP
+        const buscarCepBtn = document.getElementById('buscarCep');
+        if (buscarCepBtn) {
+            buscarCepBtn.addEventListener('click', function() {
+                const cep = document.getElementById('cep').value;
+                buscarEnderecoPorCEP(cep);
+            });
+        }
+    });
+
     function validateForm() {
         var cpf_cnpj = document.getElementById('cpf_cnpj').value;
         var telefone = document.getElementById('telefone').value;

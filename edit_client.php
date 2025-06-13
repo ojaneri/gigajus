@@ -31,16 +31,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $cpf_cnpj = $_POST['cpf_cnpj'];
     $email = $_POST['email'];
     $telefone = $_POST['telefone'];
-    $endereco = $_POST['endereco'];
+    $cep = $_POST['cep'];
+    $logradouro = $_POST['logradouro'];
+    $numero = $_POST['numero'];
+    $complemento = $_POST['complemento'];
+    $bairro = $_POST['bairro'];
+    $cidade = $_POST['cidade'];
+    $estado = $_POST['estado'];
+    
+    // Montar o endereço completo para manter compatibilidade
+    $endereco = "$logradouro, $numero";
+    if (!empty($complemento)) $endereco .= ", $complemento";
+    if (!empty($bairro)) $endereco .= ", $bairro";
+    $endereco .= " - $cidade/$estado";
+    if (!empty($cep)) $endereco .= " - CEP: $cep";
+    
     $outros_dados = $_POST['outros_dados'] ?? [];
     $ativo = isset($_POST['ativo']) ? 1 : 0;
 
     // Codificar os outros dados como JSON
     $outros_dados_json = json_encode($outros_dados);
 
-    $sql = "UPDATE clientes SET nome = ?, cpf_cnpj = ?, email = ?, telefone = ?, endereco = ?, outros_dados = ?, ativo = ? WHERE id_cliente = ?";
+    $sql = "UPDATE clientes SET nome = ?, cpf_cnpj = ?, email = ?, telefone = ?,
+            endereco = ?, cep = ?, logradouro = ?, numero = ?, complemento = ?,
+            bairro = ?, cidade = ?, estado = ?, outros_dados = ?, ativo = ?
+            WHERE id_cliente = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssii", $nome, $cpf_cnpj, $email, $telefone, $endereco, $outros_dados_json, $ativo, $id);
+    $stmt->bind_param("sssssssssssssii", $nome, $cpf_cnpj, $email, $telefone,
+                      $endereco, $cep, $logradouro, $numero, $complemento,
+                      $bairro, $cidade, $estado, $outros_dados_json, $ativo, $id);
     $stmt->execute();
 
     echo "<script>showNotification('Cliente atualizado com sucesso!', 'success');</script>";
@@ -79,35 +98,236 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deletar'])) {
             </div>
             
             <form method="POST" action="edit_client.php?id=<?php echo $id; ?>" class="improved-form">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="nome" class="form-label"><i class="fas fa-user"></i> Nome Completo</label>
-                    <input type="text" name="nome" value="<?php echo htmlspecialchars($client['nome']); ?>"
-                        placeholder="Ex: João da Silva" required class="form-control">
+                <!-- Informações básicas do cliente -->
+                <div class="form-section client-info-section">
+                    <h3 class="section-title"><i class="fas fa-user"></i> Informações Básicas</h3>
+                    <div class="section-content">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="nome" class="form-label"><i class="fas fa-user"></i> Nome Completo</label>
+                                <input type="text" name="nome" value="<?php echo htmlspecialchars($client['nome']); ?>"
+                                    placeholder="Ex: João da Silva" required class="form-control">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="cpf_cnpj" class="form-label"><i class="fas fa-id-card"></i> CPF/CNPJ</label>
+                                <input type="text" name="cpf_cnpj" value="<?php echo htmlspecialchars($client['cpf_cnpj']); ?>"
+                                    placeholder="000.000.000-00" required class="form-control">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="email" class="form-label"><i class="fas fa-envelope"></i> Email</label>
+                                <input type="email" name="email" value="<?php echo htmlspecialchars($client['email']); ?>"
+                                    placeholder="exemplo@dominio.com" required class="form-control">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="telefone" class="form-label"><i class="fas fa-phone"></i> Telefone</label>
+                                <input type="text" name="telefone" value="<?php echo htmlspecialchars($client['telefone']); ?>"
+                                    placeholder="(00) 00000-0000" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Seção de endereço -->
+                <div class="form-section endereco-section">
+                    <h3 class="section-title"><i class="fas fa-map-marker-alt"></i> Endereço</h3>
+                    <div class="section-content">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="cep" class="form-label">CEP</label>
+                                <div class="input-group">
+                                    <input type="text" name="cep" id="cep" value="<?php echo htmlspecialchars($client['cep'] ?? ''); ?>"
+                                        placeholder="00000-000" class="form-control" maxlength="9">
+                                    <div class="input-group-append">
+                                        <button type="button" id="buscarCep" class="btn btn-secondary">
+                                            <i class="fas fa-search"></i> Buscar
+                                        </button>
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">Digite o CEP e clique em Buscar para preencher o endereço automaticamente</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-9">
+                                <label for="logradouro" class="form-label">Logradouro</label>
+                                <input type="text" name="logradouro" id="logradouro" value="<?php echo htmlspecialchars($client['logradouro'] ?? ''); ?>"
+                                    placeholder="Rua, Avenida, etc." class="form-control">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="numero" class="form-label">Número</label>
+                                <input type="text" name="numero" id="numero" value="<?php echo htmlspecialchars($client['numero'] ?? ''); ?>"
+                                    placeholder="Nº" class="form-control">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="complemento" class="form-label">Complemento</label>
+                                <input type="text" name="complemento" id="complemento" value="<?php echo htmlspecialchars($client['complemento'] ?? ''); ?>"
+                                    placeholder="Apto, Bloco, etc." class="form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="bairro" class="form-label">Bairro</label>
+                                <input type="text" name="bairro" id="bairro" value="<?php echo htmlspecialchars($client['bairro'] ?? ''); ?>"
+                                    placeholder="Bairro" class="form-control">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label for="cidade" class="form-label">Cidade</label>
+                                <input type="text" name="cidade" id="cidade" value="<?php echo htmlspecialchars($client['cidade'] ?? ''); ?>"
+                                    placeholder="Cidade" class="form-control">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="estado" class="form-label">Estado</label>
+                                <select name="estado" id="estado" class="form-control">
+                                    <option value="">Selecione</option>
+                                    <?php
+                                    $estados = array(
+                                        'AC' => 'Acre', 'AL' => 'Alagoas', 'AP' => 'Amapá', 'AM' => 'Amazonas', 'BA' => 'Bahia',
+                                        'CE' => 'Ceará', 'DF' => 'Distrito Federal', 'ES' => 'Espírito Santo', 'GO' => 'Goiás',
+                                        'MA' => 'Maranhão', 'MT' => 'Mato Grosso', 'MS' => 'Mato Grosso do Sul', 'MG' => 'Minas Gerais',
+                                        'PA' => 'Pará', 'PB' => 'Paraíba', 'PR' => 'Paraná', 'PE' => 'Pernambuco', 'PI' => 'Piauí',
+                                        'RJ' => 'Rio de Janeiro', 'RN' => 'Rio Grande do Norte', 'RS' => 'Rio Grande do Sul',
+                                        'RO' => 'Rondônia', 'RR' => 'Roraima', 'SC' => 'Santa Catarina', 'SP' => 'São Paulo',
+                                        'SE' => 'Sergipe', 'TO' => 'Tocantins'
+                                    );
+                                    
+                                    $clienteEstado = $client['estado'] ?? '';
+                                    
+                                    foreach ($estados as $sigla => $nome) {
+                                        $selected = ($clienteEstado == $sigla) ? 'selected' : '';
+                                        echo "<option value=\"$sigla\" $selected>$sigla - $nome</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="cpf_cnpj" class="form-label"><i class="fas fa-id-card"></i> CPF/CNPJ</label>
-                    <input type="text" name="cpf_cnpj" value="<?php echo htmlspecialchars($client['cpf_cnpj']); ?>"
-                        placeholder="000.000.000-00" required class="form-control">
-                </div>
-
-                <div class="form-group">
-                    <label for="email" class="form-label"><i class="fas fa-envelope"></i> Email</label>
-                    <input type="email" name="email" value="<?php echo htmlspecialchars($client['email']); ?>"
-                        placeholder="exemplo@dominio.com" required class="form-control">
-                </div>
-
-                <div class="form-group">
-                    <label for="telefone" class="form-label"><i class="fas fa-phone"></i> Telefone</label>
-                    <input type="text" name="telefone" value="<?php echo htmlspecialchars($client['telefone']); ?>"
-                        placeholder="(00) 00000-0000" class="form-control">
-                </div>
-
-                <div class="form-group full-width">
-                    <label for="endereco" class="form-label"><i class="fas fa-map-marker-alt"></i> Endereço</label>
-                    <textarea name="endereco" rows="3" class="form-control"><?php echo htmlspecialchars($client['endereco']); ?></textarea>
-                </div>
+                <style>
+                    /* Reset e ajustes globais */
+                    .form-container {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        padding: 0 !important;
+                    }
+                    
+                    /* Estilos para o formulário */
+                    .improved-form {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                    }
+                    
+                    /* Estilos para todas as seções */
+                    .form-section {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        margin: 0 0 20px 0 !important;
+                        padding: 0 !important;
+                        box-sizing: border-box !important;
+                        clear: both !important;
+                    }
+                    
+                    .section-title {
+                        margin-bottom: 15px !important;
+                        padding-bottom: 10px !important;
+                        border-bottom: 1px solid #e0e0e0 !important;
+                        width: 100% !important;
+                    }
+                    
+                    .section-content {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        padding: 15px !important;
+                        background-color: #f9f9f9 !important;
+                        border-radius: 5px !important;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+                        box-sizing: border-box !important;
+                        overflow: hidden !important;
+                    }
+                    
+                    /* Estilos para as linhas e colunas */
+                    .form-row {
+                        display: flex !important;
+                        flex-wrap: wrap !important;
+                        margin-right: -10px !important;
+                        margin-left: -10px !important;
+                        width: 100% !important;
+                        margin-bottom: 15px !important;
+                        box-sizing: border-box !important;
+                        clear: both !important;
+                    }
+                    
+                    .form-group {
+                        padding-right: 10px !important;
+                        padding-left: 10px !important;
+                        margin-bottom: 15px !important;
+                        box-sizing: border-box !important;
+                    }
+                    
+                    /* Definição das colunas */
+                    .col-md-9 {
+                        flex: 0 0 75% !important;
+                        max-width: 75% !important;
+                        box-sizing: border-box !important;
+                    }
+                    
+                    .col-md-8 {
+                        flex: 0 0 66.666667% !important;
+                        max-width: 66.666667% !important;
+                        box-sizing: border-box !important;
+                    }
+                    
+                    .col-md-6 {
+                        flex: 0 0 50% !important;
+                        max-width: 50% !important;
+                        box-sizing: border-box !important;
+                    }
+                    
+                    .col-md-4 {
+                        flex: 0 0 33.333333% !important;
+                        max-width: 33.333333% !important;
+                        box-sizing: border-box !important;
+                    }
+                    
+                    .col-md-3 {
+                        flex: 0 0 25% !important;
+                        max-width: 25% !important;
+                        box-sizing: border-box !important;
+                    }
+                    
+                    /* Estilos específicos para a seção de informações básicas */
+                    .client-info-section .section-content {
+                        background-color: #f0f7ff !important;
+                    }
+                    
+                    /* Estilos específicos para a seção de endereço */
+                    .endereco-section .section-content {
+                        background-color: #f9f9f9 !important;
+                    }
+                    
+                    /* Responsividade para telas menores */
+                    @media (max-width: 768px) {
+                        .col-md-3,
+                        .col-md-4,
+                        .col-md-6,
+                        .col-md-8,
+                        .col-md-9 {
+                            flex: 0 0 100% !important;
+                            max-width: 100% !important;
+                        }
+                    }
+                </style>
             </div>
 
             <div class="form-section">
@@ -190,35 +410,112 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deletar'])) {
         </div>
     </div>
 </div>
-
 <script>
-    function adicionarOutroDado() {
-            const container = document.getElementById('outrosDadosContainer');
-            const index = container.children.length;
-            const div = document.createElement('div');
-            div.classList.add('outro-dado-item');
-            div.innerHTML = `
-                <div class="outro-dado-inputs">
-                    <input type="text" name="outros_dados[${index}][campo]"
-                        placeholder="Nome do campo" required
-                        class="form-control">
-                    <input type="text" name="outros_dados[${index}][valor]"
-                        placeholder="Valor correspondente" required
-                        class="form-control">
-                </div>
-                <button type="button" onclick="removerOutroDado(this)"
-                    class="btn btn-icon btn-remove">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            container.appendChild(div);
+    // Função para formatar o CEP
+    function formatarCEP(cep) {
+        cep = cep.replace(/\D/g, ''); // Remove caracteres não numéricos
+        if (cep.length > 5) {
+            cep = cep.substring(0, 5) + '-' + cep.substring(5);
         }
+        return cep;
+    }
     
-        function removerOutroDado(button) {
-            const div = button.closest('.outro-dado-item');
-            if (div) {
-                div.remove();
-            }
+    // Função para buscar endereço pelo CEP
+    function buscarEnderecoPorCEP(cep) {
+        // Remove caracteres não numéricos
+        cep = cep.replace(/\D/g, '');
+        
+        if (cep.length !== 8) {
+            alert('CEP inválido. O CEP deve conter 8 dígitos.');
+            return;
+        }
+        
+        // Mostrar indicador de carregamento
+        document.getElementById('buscarCep').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        
+        // Fazer requisição para a API ViaCEP
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.erro) {
+                    alert('CEP não encontrado.');
+                } else {
+                    // Preencher os campos com os dados retornados
+                    document.getElementById('logradouro').value = data.logradouro;
+                    document.getElementById('bairro').value = data.bairro;
+                    document.getElementById('cidade').value = data.localidade;
+                    document.getElementById('estado').value = data.uf;
+                    
+                    // Focar no campo número para facilitar o preenchimento
+                    document.getElementById('numero').focus();
+                }
+                
+                // Restaurar o botão de busca
+                document.getElementById('buscarCep').innerHTML = '<i class="fas fa-search"></i> Buscar';
+            })
+            .catch(error => {
+                console.error('Erro ao buscar CEP:', error);
+                alert('Erro ao buscar CEP. Verifique sua conexão e tente novamente.');
+                document.getElementById('buscarCep').innerHTML = '<i class="fas fa-search"></i> Buscar';
+            });
+    }
+    
+    // Inicializar eventos quando o documento estiver pronto
+    document.addEventListener('DOMContentLoaded', function() {
+        // Adicionar evento ao campo de CEP para formatação
+        const cepInput = document.getElementById('cep');
+        if (cepInput) {
+            cepInput.addEventListener('input', function() {
+                this.value = formatarCEP(this.value);
+            });
+            
+            // Adicionar evento para buscar CEP ao pressionar Enter
+            cepInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    buscarEnderecoPorCEP(this.value);
+                }
+            });
+        }
+        
+        // Adicionar evento ao botão de busca de CEP
+        const buscarCepBtn = document.getElementById('buscarCep');
+        if (buscarCepBtn) {
+            buscarCepBtn.addEventListener('click', function() {
+                const cep = document.getElementById('cep').value;
+                buscarEnderecoPorCEP(cep);
+            });
+        }
+    });
+
+    function adicionarOutroDado() {
+        const container = document.getElementById('outrosDadosContainer');
+        const index = container.children.length;
+        const div = document.createElement('div');
+        div.classList.add('outro-dado-item');
+        div.innerHTML = `
+            <div class="outro-dado-inputs">
+                <input type="text" name="outros_dados[${index}][campo]"
+                    placeholder="Nome do campo" required
+                    class="form-control">
+                <input type="text" name="outros_dados[${index}][valor]"
+                    placeholder="Valor correspondente" required
+                    class="form-control">
+            </div>
+            <button type="button" onclick="removerOutroDado(this)"
+                class="btn btn-icon btn-remove">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        container.appendChild(div);
+    }
+
+    function removerOutroDado(button) {
+        const div = button.closest('.outro-dado-item');
+        if (div) {
+            div.remove();
+        }
+    }
         }
         
         // Função para mostrar o modal de confirmação de exclusão

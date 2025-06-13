@@ -19,6 +19,29 @@ CREATE TABLE processos (
     status ENUM('ativo', 'arquivado') DEFAULT 'ativo'
 );
 
+-- Tabela de Clientes (Atualizada com campos de endereço)
+CREATE TABLE clientes (
+    id_cliente INT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(255) NOT NULL,
+    cpf_cnpj VARCHAR(20) NOT NULL,
+    endereco TEXT,
+    cep VARCHAR(10),
+    logradouro VARCHAR(255),
+    numero VARCHAR(20),
+    complemento VARCHAR(255),
+    bairro VARCHAR(100),
+    cidade VARCHAR(100),
+    estado VARCHAR(2),
+    telefone VARCHAR(20) DEFAULT NULL,
+    email VARCHAR(255) DEFAULT NULL,
+    outros_dados JSON DEFAULT NULL,
+    ativo TINYINT(1) DEFAULT '1',
+    PRIMARY KEY (id_cliente),
+    INDEX idx_cliente_cidade (cidade),
+    INDEX idx_cliente_estado (estado),
+    INDEX idx_cliente_cep (cep)
+);
+
 -- Tabela de Notificações (Atualizada)
 CREATE TABLE notifications (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -226,3 +249,65 @@ showNotification('O sistema será atualizado em breve.');
 ```
 
 As notificações são exibidas no canto superior direito da tela, com animação de entrada e saída, e são fechadas automaticamente após 5 segundos ou manualmente pelo usuário.
+
+## Sistema de Endereços com CEP
+
+O sistema implementa um mecanismo avançado de gerenciamento de endereços para clientes, com busca automática por CEP e armazenamento em campos separados.
+
+### Estrutura de Dados
+Os endereços são armazenados nos seguintes campos na tabela `clientes`:
+- `endereco`: Campo de texto completo (mantido para compatibilidade)
+- `cep`: CEP do endereço (VARCHAR(10))
+- `logradouro`: Nome da rua, avenida, etc. (VARCHAR(255))
+- `numero`: Número do endereço (VARCHAR(20))
+- `complemento`: Complemento do endereço (VARCHAR(255))
+- `bairro`: Bairro do endereço (VARCHAR(100))
+- `cidade`: Cidade do endereço (VARCHAR(100))
+- `estado`: Estado do endereço (VARCHAR(2))
+
+### Índices para Busca
+Foram criados índices para otimizar buscas por:
+- CEP (`idx_cliente_cep`)
+- Cidade (`idx_cliente_cidade`)
+- Estado (`idx_cliente_estado`)
+
+### Funcionalidades
+- **Busca por CEP**: Integração com a API ViaCEP para preenchimento automático de endereços
+- **Campos Separados**: Cada componente do endereço tem seu próprio campo
+- **Compatibilidade**: O campo `endereco` original é mantido e preenchido automaticamente
+- **Buscas Avançadas**: Possibilidade de buscar clientes por cidade ou estado
+
+### Implementação
+- Formulários de criação e edição de clientes organizados em seções
+- Layout responsivo com CSS flexbox
+- Validação de campos no lado do cliente
+- Preenchimento automático via API
+
+### Exemplo de Uso da API ViaCEP
+```javascript
+// Função para buscar endereço pelo CEP
+function buscarEnderecoPorCEP(cep) {
+    // Remove caracteres não numéricos
+    cep = cep.replace(/\D/g, '');
+    
+    if (cep.length !== 8) {
+        alert('CEP inválido. O CEP deve conter 8 dígitos.');
+        return;
+    }
+    
+    // Fazer requisição para a API ViaCEP
+    fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.erro) {
+                alert('CEP não encontrado.');
+            } else {
+                // Preencher os campos com os dados retornados
+                document.getElementById('logradouro').value = data.logradouro;
+                document.getElementById('bairro').value = data.bairro;
+                document.getElementById('cidade').value = data.localidade;
+                document.getElementById('estado').value = data.uf;
+            }
+        });
+}
+```
